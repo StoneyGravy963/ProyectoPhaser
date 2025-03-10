@@ -1,0 +1,35 @@
+.press-start-2p-regular {
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+body {
+    width: 100%;
+    text-align: center;
+    margin: 50px;
+    background-image: url(fondo.webp);
+    background-size: 100%;
+    background-repeat: none;
+
+    display: flex;
+    justify-content: center;
+}
+
+.tablero {
+    font-family: "Press Start 2P", sans-serif;
+    font-size: 50px;
+    width: 1080px;
+    height: 720px;
+    border: 2px solid;
+    
+    
+    
+    align-items: center;
+    justify-content: center;
+    cursor: url('cursor_2.png'), auto; 
+}
+
+.tablero div{
+    margin: 100px;
+}
