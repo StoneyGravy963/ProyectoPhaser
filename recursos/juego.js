@@ -10,7 +10,9 @@ class Juego extends Phaser.Scene {
         this.load.image('berserker', './recursos/assets/bomb.png');
         this.load.image('canon', './recursos/assets/bomb.png');
         this.load.image('proyectil', './recursos/assets/star.png');
-        this.load.spritesheet('dude', './recursos/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+        this.load.image('recurso', './recursos/assets/star.png');
+        this.load.image('recursoEspecial', './recursos/assets/diamond.png');
+        this.load.spritesheet('dude', './recursos/assets/caballero-der.png', { frameWidth: 192, frameHeight: 95 });    
     }
 
     create() {
@@ -25,13 +27,15 @@ class Juego extends Phaser.Scene {
         this.platforms.create(450, 620, 'ground');
 
         this.player = this.physics.add.sprite(100, 450, 'dude');
+        this.player.setSize(60,70);
+        this.player.setScale(0.5);
         this.player.setBounce(0.2);
-        this.player.setSize(30, 43);
-        this.player.setOffset(0, 6);
         this.cameras.main.startFollow(this.player,false,0.2);
         this.player.setCollideWorldBounds(true);
         // para que sea inmune
         this.player.inmune = false; 
+        // por si se cae
+        this.player.ultimaPosicionSegura = { x: 100, y: 450 };
         
         this.cursors = this.input.keyboard.createCursorKeys();
         this.anims.create({
@@ -49,10 +53,28 @@ class Juego extends Phaser.Scene {
 
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 5 }),
             frameRate: 10,
             repeat: -1
         });
+        // recursos especiales
+        this.recursosEspeciales = this.physics.add.staticGroup();
+        
+;       this.crearRecursoEspecial(300, 300); 
+        this.crearRecursoEspecial(500, 600);
+
+        // temp recursos esp
+        this.tiempoEspecial = 10000; 
+        this.tiempoEspecialText = this.add.text(16, 84, 'Rec-Especial: 10s', {
+            fontSize: '32px',
+            fill: '#000'
+        }).setScrollFactor(0);
+
+        // Recursos
+        this.recursos = this.physics.add.staticGroup();
+        this.crearRecurso(200, 400); 
+        this.crearRecurso(650, 450); 
+        this.crearRecurso(100, 200);
 
         // Vampiro
         this.vampiros = this.physics.add.group();
@@ -94,7 +116,10 @@ class Juego extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.vampiros, this.hitPlayer, null, this);
         this.physics.add.overlap(this.player, this.berserkers, this.hitPlayer, null, this);
         this.physics.add.overlap(this.player, this.proyectiles, this.hitPlayer, null, this); 
-        this.physics.add.overlap(this.player, this.canones, this.hitPlayer, null, this); 
+        this.physics.add.overlap(this.player, this.canones, this.hitPlayer, null, this);
+        this.physics.add.overlap(this.player, this.recursos, this.recolectarRecurso, null, this);
+        this.physics.add.overlap(this.player, this.recursos, this.recolectarRecurso, null, this);
+        this.physics.add.overlap(this.player, this.recursosEspeciales, this.recolectarRecursoEspecial, null, this); 
     }
 
     crearVampiro(x, y) {
@@ -113,6 +138,28 @@ class Juego extends Phaser.Scene {
         berserker.rangoPatrulla = 150; 
         berserker.XInicial = berserker.x; 
         return berserker;
+    }
+    crearRecurso(x, y) {
+        let recurso = this.recursos.create(x, y, 'recurso');
+        
+        return recurso;
+    }
+    recolectarRecurso(player, recurso) {
+        recurso.disableBody(true, true); 
+        this.score += 10; 
+        this.scoreText.setText('Score: ' + this.score); 
+    }
+    crearRecursoEspecial(x, y) {
+        let recurso = this.recursosEspeciales.create(x, y, 'recursoEspecial');
+        recurso.setScale(0.1);
+        recurso.setSize(30,30);
+        recurso.setOffset(160,108);
+        return recurso;
+    }
+    recolectarRecursoEspecial(player, recurso) {
+        recurso.disableBody(true, true); 
+        this.score += 50; 
+        this.scoreText.setText('Score: ' + this.score);
     }
 
     // crearCanon(x, y) {
@@ -179,10 +226,15 @@ class Juego extends Phaser.Scene {
         
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-160);
+
+            
+            this.player.setFlipX(true);
             this.player.anims.play('left', true);
             this.player.voltear = false;
         } else if (this.cursors.right.isDown) {
             this.player.setVelocityX(160);
+
+            this.player.setFlipX(false);
             this.player.anims.play('right', true);
             this.player.voltear = true;
         } else {
@@ -225,7 +277,7 @@ class Juego extends Phaser.Scene {
         //     });
         // }
 
-        // lippia proyectiles fuera d epantalla
+        // limppia proyectiles fuera d epantalla
         this.proyectiles.getChildren().forEach(proyectil => {
             if (proyectil.x < 0 || proyectil.x > 3200 || proyectil.y < 0 || proyectil.y > 800) {
                 proyectil.setActive(false);
@@ -234,12 +286,38 @@ class Juego extends Phaser.Scene {
         });
         
         // Si se cae
-        if (this.player.y > this.physics.world.bounds.height - 30) {
-            this.hitPlayer(this.player,null); 
+        // guarda la ultima pos
+        if (this.player.body.touching.down) {
+            this.player.ultimaPosicionSegura = { x: this.player.x, y: this.player.y };
         }
 
-        // console.log(this.player.y);
-        // console.log(this.physics.world.bounds.height);
+        // respawn
+        if (this.player.y > this.physics.world.bounds.height - 30) {
+            this.hitPlayer(this.player, null);
+            if (!this.gameOver) { 
+                this.player.setPosition(this.player.ultimaPosicionSegura.x, this.player.ultimaPosicionSegura.y);
+            }
+        }
+
+        //recursos especiales
+        if (this.tiempoEspecial > 0 && this.recursosEspeciales.countActive() > 0) {
+            this.tiempoEspecial -= this.sys.game.loop.delta; 
+            this.tiempoEspecialText.setText('Especial: ' + Math.ceil(this.tiempoEspecial / 1000) + 's');
+
+            if (this.tiempoEspecial <= 0) {
+                // Convertir recursos especiales en normales
+                this.recursosEspeciales.getChildren().forEach(recurso => {
+                    recurso.disableBody(true, true); 
+                    this.crearRecurso(recurso.x, recurso.y); 
+                });
+                this.recursosEspeciales.clear(true, true); 
+                // this.tiempoEspecialText.setText('Especial: 0s');
+                this.tiempoEspecialText.setVisible(false); 
+            }
+        }else if(this.recursosEspeciales.countActive() === 0){
+            this.tiempoEspecialText.setVisible(false);
+        }
+
 
     }
 

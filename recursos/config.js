@@ -7,6 +7,7 @@ const config = {
         arcade: {
             gravity: { y: 300 },
             debug: true
+
         }
     },
     scene: [Juego] 
