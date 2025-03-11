@@ -8,16 +8,39 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="tablero">
-        <div class="Empezar" >
-            Empezar
-        </div>
-        <div>
-            Opciones
-        </div>
-        <div>
-            Salir
+    <div class="contenedor">
+        <div class="tablero">
+            
+            <div class="opciones pantalla-principal">
+                <div class="opcion" onclick="moverCamara('abajo')">Empezar</div>
+                <div class="opcion" onclick="moverCamara('izquierda')">Records</div>
+                <div class="opcion" onclick="moverCamara('derecha')">Intrucciones</div>
+                <div class="opcion" onclick="moverCamara('arriba')">Creditos</div>
+            </div>
+    
+            
+            <div class="opciones pantalla-juego">
+                <div class="opcion">Nueva Partida</div>
+                <div class="opcion">Continuar</div>
+                <div class="opcion" onclick="moverCamara('centro')">Volver</div>
+            </div>
+    
+            
+            <div class="opciones pantalla-opciones">
+                <div class="opcion">Volumen</div>
+                <div class="opcion">Controles</div>
+                <div class="opcion" onclick="moverCamara('centro')">Volver</div>
+            </div>
+    
+            
+            <div class="opciones pantalla-salir">
+                <div class="opcion">Confirmar Salida</div>
+                <div class="opcion">Créditos</div>
+                <div class="opcion" onclick="moverCamara('centro')">Volver</div>
+            </div>
         </div>
     </div>
+    
+    <script src="menu.js"></script>
 </body>
 </html>
