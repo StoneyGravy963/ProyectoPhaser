@@ -8,7 +8,7 @@ class Juego extends Phaser.Scene {
         this.load.image('ground', './recursos/assets/platform.png');
         this.load.image('star', './recursos/assets/star.png');
         this.load.image('bomb', './recursos/assets/bomb.png');
-        this.load.spritesheet('dude', './recursos/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet('dude', './recursos/assets/caballero-der.png', { frameWidth: 192, frameHeight: 95 });    
     }
 
     create() {
@@ -21,6 +21,8 @@ class Juego extends Phaser.Scene {
         this.platforms.create(750, 220, 'ground');
 
         this.player = this.physics.add.sprite(100, 450, 'dude');
+        this.player.setSize(60,70);
+        this.player.setScale(0.5);
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
 
@@ -39,7 +41,7 @@ class Juego extends Phaser.Scene {
 
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 5 }),
             frameRate: 10,
             repeat: -1
         });
@@ -72,9 +74,14 @@ class Juego extends Phaser.Scene {
 
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-160);
+
+            
+            this.player.setFlipX(true);
             this.player.anims.play('left', true);
         } else if (this.cursors.right.isDown) {
             this.player.setVelocityX(160);
+
+            this.player.setFlipX(false);
             this.player.anims.play('right', true);
         } else {
             this.player.setVelocityX(0);
