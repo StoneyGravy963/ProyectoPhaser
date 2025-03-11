@@ -30,6 +30,8 @@ class Juego extends Phaser.Scene {
         this.player.setOffset(0, 6);
         this.cameras.main.startFollow(this.player,false,0.2);
         this.player.setCollideWorldBounds(true);
+        // para que sea inmune
+        this.player.inmune = false; 
         
         this.cursors = this.input.keyboard.createCursorKeys();
         this.anims.create({
@@ -79,12 +81,20 @@ class Juego extends Phaser.Scene {
             fill: '#000' 
         }).setScrollFactor(0); 
 
+        // vidas
+        this.vidas = 3; 
+        this.vidasText = this.add.text(16, 50, 'Vidas: 3', { 
+            fontSize: '32px',
+            fill: '#000'
+        }).setScrollFactor(0);
+
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.berserkers, this.platforms); 
         this.physics.add.collider(this.canones, this.platforms);
         this.physics.add.overlap(this.player, this.vampiros, this.hitPlayer, null, this);
         this.physics.add.overlap(this.player, this.berserkers, this.hitPlayer, null, this);
         this.physics.add.overlap(this.player, this.proyectiles, this.hitPlayer, null, this); 
+        this.physics.add.overlap(this.player, this.canones, this.hitPlayer, null, this); 
     }
 
     crearVampiro(x, y) {
@@ -114,7 +124,8 @@ class Juego extends Phaser.Scene {
     crearCanon(x, y) {
         let canon = this.canones.create(x, y, 'canon');
         canon.setGravityY(300);
-        canon.intervaloDisparo = Phaser.Math.Between(3, 4); 
+        // Dispara de 2 a 4 segundos estaticos para cada uno
+        canon.intervaloDisparo = Phaser.Math.Between(2, 4); 
         console.log(canon.intervaloDisparo);
         this.time.addEvent({
             delay: canon.intervaloDisparo * 1000, 
@@ -224,18 +235,39 @@ class Juego extends Phaser.Scene {
         
         // Si se cae
         if (this.player.y > this.physics.world.bounds.height - 30) {
-            this.hitBomb(this.player); 
+            this.hitPlayer(this.player,null); 
         }
+
         // console.log(this.player.y);
         // console.log(this.physics.world.bounds.height);
+
     }
 
-    hitPlayer(player) {
-        this.physics.pause();
-        player.setTint(0xff0000); 
-        player.anims.play('turn'); 
-        this.gameOver = true; 
+    hitPlayer(player, enemigo) {
+        if (!player.inmune && this.vidas > 0) { 
+            this.vidas--; 
+            this.vidasText.setText('Vidas: ' + this.vidas); 
+            
+            player.inmune = true;
+            player.setAlpha(0.5); 
+            
+
+            this.time.addEvent({
+                delay: 1000, 
+                callback: () => {
+                    player.inmune = false;
+                    player.setAlpha(1);
+                },
+                callbackScope: this
+            });
+            
+            // Perder
+            if (this.vidas <= 0) {
+                this.physics.pause();
+                player.setTint(0xff0000);
+                player.anims.play('turn');
+                this.gameOver = true;
+            }
+        }
     }
-
-
 }
