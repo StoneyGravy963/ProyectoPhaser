@@ -110,6 +110,8 @@ class Juego extends Phaser.Scene {
             fill: '#000'
         }).setScrollFactor(0);
 
+        
+
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.berserkers, this.platforms); 
         this.physics.add.collider(this.canones, this.platforms);
@@ -342,9 +344,13 @@ class Juego extends Phaser.Scene {
             // Perder
             if (this.vidas <= 0) {
                 this.physics.pause();
+                this.scene.pause();
                 player.setTint(0xff0000);
                 player.anims.play('turn');
                 this.gameOver = true;
+                this.scene.launch('GameOver');
+                // this.scene.start('GameOver');
+                
             }
         }
     }
