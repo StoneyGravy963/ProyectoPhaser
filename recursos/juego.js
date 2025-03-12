@@ -11,7 +11,7 @@ class Juego extends Phaser.Scene {
         this.load.image('canon', './recursos/assets/bomb.png');
         this.load.image('proyectil', './recursos/assets/star.png');
         this.load.image('recurso', './recursos/assets/star.png');
-        this.load.image('attack', './recursos/assets/star.png');
+        this.load.image('ataque', './recursos/assets/star.png');
         this.load.image('recursoEspecial', './recursos/assets/diamond.png');
         this.load.spritesheet('dude', './recursos/assets/caballero-der.png', { frameWidth: 192, frameHeight: 95 });    
     }
@@ -28,51 +28,12 @@ class Juego extends Phaser.Scene {
         this.platforms.create(750, 220, 'ground');
         this.platforms.create(450, 620, 'ground');
 
-        this.player = this.physics.add.sprite(100, 450, 'dude');
-        this.player.setSize(60,65);
-        this.player.setScale(0.5);
-        this.player.setBounce(0.2);
-        this.cameras.main.startFollow(this.player,false,0.2);
-        this.player.setCollideWorldBounds(true);
-        // para que sea inmune
-        this.player.inmune = false; 
-        // por si se cae
-        this.player.ultimaPosicionSegura = { x: 100, y: 450 };
-
-        // Ataques para cada dirección 
-        this.ataque = this.physics.add.sprite(0, 0, 'attack');
-        this.ataque.setVisible(false);
-        this.ataque.setActive(false);
-        this.ataque.body.setAllowGravity(false);
-        this.ataque.setSize(30, 40);
-        // direccion inicial
-        this.player.voltear = true;
-        // Puede atacar?
-        this.ataqueCooldown = 0;
-
-        // Tecla para atacar
-        this.ataquekey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        // Usar Player.js con ataque encapsulado
+        this.player = new Player(this, 100, 450);
+        this.cameras.main.startFollow(this.player.sprite, false, 0.2);
         
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.anims.create({
-            key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
-        });
 
-        this.anims.create({
-            key: 'turn',
-            frames: [{ key: 'dude', frame: 4 }],
-            frameRate: 20
-        });
-
-        this.anims.create({
-            key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 4 }),
-            frameRate: 10,
-            repeat: -1
-        });
         // recursos especiales
         this.recursosEspeciales = this.physics.add.staticGroup();
         
@@ -126,21 +87,19 @@ class Juego extends Phaser.Scene {
             fill: '#000'
         }).setScrollFactor(0);
 
-        
-
-        this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.collider(this.player.sprite, this.platforms);
         this.physics.add.collider(this.berserkers, this.platforms); 
         this.physics.add.collider(this.canones, this.platforms);
-        this.physics.add.overlap(this.player, this.vampiros, this.hitPlayer, null, this);
-        this.physics.add.overlap(this.player, this.berserkers, this.hitPlayer, null, this);
-        this.physics.add.overlap(this.player, this.proyectiles, this.hitPlayer, null, this); 
-        this.physics.add.overlap(this.player, this.canones, this.hitPlayer, null, this);
-        this.physics.add.overlap(this.player, this.recursos, this.recolectarRecurso, null, this);
-        this.physics.add.overlap(this.player, this.recursos, this.recolectarRecurso, null, this);
-        this.physics.add.overlap(this.player, this.recursosEspeciales, this.recolectarRecursoEspecial, null, this);
+        this.physics.add.overlap(this.player.sprite, this.vampiros, this.hitPlayer, null, this);
+        this.physics.add.overlap(this.player.sprite, this.berserkers, this.hitPlayer, null, this);
+        this.physics.add.overlap(this.player.sprite, this.proyectiles, this.hitPlayer, null, this); 
+        this.physics.add.overlap(this.player.sprite, this.canones, this.hitPlayer, null, this);
+
+        this.physics.add.overlap(this.player.sprite, this.recursos, this.recolectarRecurso, null, this);
+        this.physics.add.overlap(this.player.sprite, this.recursosEspeciales, this.recolectarRecursoEspecial, null, this);
         
-        this.physics.add.overlap(this.ataque, this.vampiros, this.hitEnemy, null, this);
-        this.physics.add.overlap(this.ataque, this.berserkers, this.hitEnemy, null, this);
+        this.physics.add.overlap(this.player.ataque, this.vampiros, this.hitEnemy, null, this);
+        this.physics.add.overlap(this.player.ataque, this.berserkers, this.hitEnemy, null, this);
     }
 
     crearVampiro(x, y) {
@@ -210,8 +169,8 @@ class Juego extends Phaser.Scene {
             proyectil.setVisible(true);
             
             // Nunca pense usar teorema de pitagoras pero aqui andamos
-            let dx = this.player.x - canon.x; 
-            let dy = this.player.y - canon.y; 
+            let dx = this.player.sprite.x - canon.x; 
+            let dy = this.player.sprite.y - canon.y; 
             let distancia = Math.sqrt(dx * dx + dy * dy); 
             
             // Normalizando 
@@ -246,76 +205,41 @@ class Juego extends Phaser.Scene {
         if (this.gameOver) return;
         
         if (this.cursors.left.isDown) {
-            this.player.setVelocityX(-160);
-
-            
-            this.player.setFlipX(true);
-            this.player.anims.play('left', true);
-            this.player.voltear = false;
+            this.player.sprite.setVelocityX(-160);
+            this.player.sprite.setFlipX(true);
+            this.player.sprite.anims.play('left', true);
+            this.player.sprite.voltear = false;
         } else if (this.cursors.right.isDown) {
-            this.player.setVelocityX(160);
-
-            this.player.setFlipX(false);
-            this.player.anims.play('right', true);
-            this.player.voltear = true;
+            this.player.sprite.setVelocityX(160);
+            this.player.sprite.setFlipX(false);
+            this.player.sprite.anims.play('right', true);
+            this.player.sprite.voltear = true;
         } else {
-            this.player.setVelocityX(0);
-            this.player.anims.play('turn');
+            this.player.sprite.setVelocityX(0);
+            this.player.sprite.anims.play('turn');
         }
 
-        if (this.cursors.up.isDown && this.player.body.touching.down) {
-            this.player.setVelocityY(-330);
+        if (this.cursors.up.isDown && this.player.sprite.body.touching.down) {
+            this.player.sprite.setVelocityY(-330);
         }
 
-        // Ataque con ESPACIO
-        // Reducir cooldown
-    if (this.ataqueCooldown > 0) {
-        this.ataqueCooldown -= this.sys.game.loop.delta; 
-    }
+        // ataque
+        this.player.uPataque();
 
-    if (Phaser.Input.Keyboard.JustDown(this.ataquekey) && this.ataqueCooldown <= 0) {
-        console.log("aaaaaa");
-        console.log(this.player.voltear);
-        if (this.player.voltear === false) { // Izquierda
-            this.ataque.setPosition(this.player.x - 20, this.player.y);
-        } else if (this.player.voltear === true) { // Derecha
-            this.ataque.setPosition(this.player.x + 20, this.player.y);
-        }
-        this.ataque.setVisible(true);
-        // this.ataque.setActive(true);
-        this.ataque.enableBody(true, this.ataque.x, this.ataque.y, true, true);
-        this.ataque.setVelocityX(this.player.body.velocity.x);
-        // this.ataque.setVelocityY(this.player.body.velocity.y);
-
-        // el ataque dura 2ms
-        this.time.addEvent({
-            delay: 100,
-            callback: () => {
-                this.ataque.setVisible(false);
-                // this.ataque.setActive(false);
-                // this.ataque.destroy(true);
-                this.ataque.disableBody(true,true);
-            },
-            callbackScope: this
-        });
-
-        this.ataqueCooldown = 1000;
-    }
-
-         // Logico vamp
-         this.vampiros.getChildren().forEach(vampiro => {
-            let direccionJugador = this.player.voltear ? -1 : 1;
-            let direccionVampiro = Math.sign(this.player.x - vampiro.x);
+        // Logico vamp
+        this.vampiros.getChildren().forEach(vampiro => {
+            let direccionJugador = this.player.sprite.voltear ? -1 : 1;
+            let direccionVampiro = Math.sign(this.player.sprite.x - vampiro.x);
 
             if (direccionJugador === direccionVampiro) {
                 vampiro.setVelocity(0);
                 vampiro.setAlpha(0.2);
             } else {
                 vampiro.setAlpha(1);
-                this.physics.moveToObject(vampiro, this.player, 40);
+                this.physics.moveToObject(vampiro, this.player.sprite, 40);
             }
         });
-        // Logica berser
+        //  berser
         this.berserkers.getChildren().forEach(berserker => {
             berserker.setVelocityX(berserker.velPatrulla * berserker.dirPatrulla);
 
@@ -343,15 +267,15 @@ class Juego extends Phaser.Scene {
         
         // Si se cae
         // guarda la ultima pos
-        if (this.player.body.touching.down) {
-            this.player.ultimaPosicionSegura = { x: this.player.x, y: this.player.y };
+        if (this.player.sprite.body.touching.down) {
+            this.player.sprite.ultimaPosicionSegura = { x: this.player.sprite.x, y: this.player.sprite.y };
         }
 
         // respawn
-        if (this.player.y > this.physics.world.bounds.height - 30) {
-            this.hitPlayer(this.player, null);
+        if (this.player.sprite.y > this.physics.world.bounds.height - 30) {
+            this.hitPlayer(this.player.sprite, null);
             if (!this.gameOver) { 
-                this.player.setPosition(this.player.ultimaPosicionSegura.x, this.player.ultimaPosicionSegura.y);
+                this.player.sprite.setPosition(this.player.sprite.ultimaPosicionSegura.x, this.player.sprite.ultimaPosicionSegura.y);
             }
         }
 
@@ -370,16 +294,14 @@ class Juego extends Phaser.Scene {
                 // this.tiempoEspecialText.setText('Especial: 0s');
                 this.tiempoEspecialText.setVisible(false); 
             }
-        }else if(this.recursosEspeciales.countActive() === 0){
+        } else if(this.recursosEspeciales.countActive() === 0){
             this.tiempoEspecialText.setVisible(false);
         }
 
         // pasar al siguiente nivel
-        if (this.player.x >= 1100 - 50) {//cambiar ancho 
-            this.scene.start('Boss'); 
+        if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
+            this.scene.start('Boss', { score: this.score, vidas: this.vidas });
         }
-
-
     }
 
     hitEnemy(ataque, enemy) {
@@ -396,7 +318,6 @@ class Juego extends Phaser.Scene {
             player.inmune = true;
             player.setAlpha(0.5); 
             
-
             this.time.addEvent({
                 delay: 1000, 
                 callback: () => {
@@ -415,7 +336,6 @@ class Juego extends Phaser.Scene {
                 this.gameOver = true;
                 this.scene.launch('GameOver');
                 // this.scene.start('GameOver');
-                
             }
         }
     }

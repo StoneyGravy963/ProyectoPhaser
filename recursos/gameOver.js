@@ -40,6 +40,7 @@ class GameOver extends Phaser.Scene {
             this.scene.get('Juego').gameOver = false;
             // this.scene.stop('GameOver');
             this.scene.stop('Juego');
+            this.scene.stop('Boss');
             this.scene.start('Juego');
         });
     }
