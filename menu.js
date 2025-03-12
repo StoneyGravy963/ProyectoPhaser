@@ -1,10 +1,10 @@
-let posX = -500;
-let posY = -500;
-const paso = 500;
+let posX = -1100;
+let posY = -700;
+const pasoX = 1100;
+const pasoY = 700;
 
 window.onload = () => {
     const tablero = document.querySelector(".tablero");
-    // Asegurar que la posición inicial se establece correctamente
     requestAnimationFrame(() => {
         tablero.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
     });
@@ -13,37 +13,39 @@ window.onload = () => {
 function moverCamara(direccion) {
     const tablero = document.querySelector(".tablero");
 
-    if (direccion === "arriba") posY -= paso;
-    if (direccion === "abajo") posY += paso; 
-    if (direccion === "derecha") posX += paso;
-    if (direccion === "izquierda") posX -= paso;
+    if (direccion === "arriba") posY -= pasoY;
+    if (direccion === "abajo") posY += pasoY; 
+    if (direccion === "derecha") posX += pasoX;
+    if (direccion === "izquierda") posX -= pasoX;
+    if (direccion === "centro") {
+        posX = -1100;
+        posY = -700;
+    }
 
-    
-    posX = Math.max(-1000, Math.min(500, posX)); 
-    posY = Math.max(-1500, Math.min(500, posY)); 
+    // Mantener dentro del tablero
+    posX = Math.max(-2200, Math.min(1100, posX)); 
+    posY = Math.max(-1400, Math.min(700, posY)); 
 
     tablero.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
-    cambiarOpciones(direccion);
 }
 
-function cambiarOpciones(direccion) {
-    const opciones = document.querySelectorAll(".opcion");
 
-    if (direccion === "arriba") {
-        opciones[0].textContent = "Nueva Partida";
-        opciones[1].textContent = "Continuar";
-        opciones[2].textContent = "Volver";
-    } else if (direccion === "abajo") { 
-        opciones[0].textContent = "Extras";
-        opciones[1].textContent = "Dificultad";
-        opciones[2].textContent = "Volver";
-    } else if (direccion === "derecha") {
-        opciones[0].textContent = "Volumen";
-        opciones[1].textContent = "Controles";
-        opciones[2].textContent = "Volver";
-    } else if (direccion === "izquierda") {
-        opciones[0].textContent = "Confirmar Salida";
-        opciones[1].textContent = "Créditos";
-        opciones[2].textContent = "Volver";
-    }
+/*Funciones para seleccion de personaje (Drag and drop)*/
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev, statusId) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+}
+
+function dragEnter(statusId) {
+    document.getElementById(statusId).innerText = "Imagen dentro del área";
 }

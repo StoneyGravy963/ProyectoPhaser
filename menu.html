@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Carrois+Gothic+SC&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <title>Document</title>
+    <title>Menú Juego</title>
 </head>
 <body>
     <div class="contenedor">
@@ -14,33 +14,52 @@
             <div class="opciones pantalla-principal">
                 <div class="opcion" onclick="moverCamara('abajo')">Empezar</div>
                 <div class="opcion" onclick="moverCamara('izquierda')">Records</div>
-                <div class="opcion" onclick="moverCamara('derecha')">Intrucciones</div>
-                <div class="opcion" onclick="moverCamara('arriba')">Creditos</div>
+                <div class="opcion" onclick="moverCamara('derecha')">Instrucciones</div>
+                <div class="opcion" onclick="moverCamara('arriba')">Créditos</div>
             </div>
-    
+
             
             <div class="opciones pantalla-juego">
-                <div class="opcion">Nueva Partida</div>
-                <div class="opcion">Continuar</div>
+                <div id="div1" ondrop="drop(event, 'status1')" ondragover="allowDrop(event)" ondragenter="dragEnter('status1')" ondragleave="dragLeave('status1')">
+                    <img src="Green_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="drag1" width="250" height="150">
+                </div>
+        
+                <div id="div2" ondrop="drop(event, 'status2')" ondragover="allowDrop(event)" ondragenter="dragEnter('status2')" ondragleave="dragLeave('status2')">
+                    <img src="Red_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="drag2" width="250" height="150">
+                </div>
+                <div id="div3" ondrop="drop(event, 'status3')" ondragover="allowDrop(event)" ondragenter="dragEnter('status3')" ondragleave="dragLeave('status3')">
+                    <img src="Blue_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="drag3" width="250" height="150">
+                </div>
+                <div id="div4" ondrop="drop(event, 'status4')" ondragover="allowDrop(event)" ondragenter="dragEnter('status4')" ondragleave="dragLeave('status4')">
+                    
+                </div>
+
+                <div class="opcion-juego" onclick="moverCamara('centro')">Volver</div>
+            </div>
+
+            
+            <div class="opciones pantalla-records">
+                <div class="opcion">Ver Records</div>
+                <div class="opcion">Restablecer</div>
                 <div class="opcion" onclick="moverCamara('centro')">Volver</div>
             </div>
-    
-            
-            <div class="opciones pantalla-opciones">
-                <div class="opcion">Volumen</div>
-                <div class="opcion">Controles</div>
+
+           
+            <div class="opciones pantalla-instrucciones">
+                <div class="opcion">Desarrolladores</div>
+                <div class="opcion">Más Información</div>
                 <div class="opcion" onclick="moverCamara('centro')">Volver</div>
             </div>
-    
-            
-            <div class="opciones pantalla-salir">
-                <div class="opcion">Confirmar Salida</div>
-                <div class="opcion">Créditos</div>
+
+            <div class="opciones pantalla-creditos">
+                <div>Elias</div>
+                <div>Jaime</div>
+                <div>Yahir</div>
                 <div class="opcion" onclick="moverCamara('centro')">Volver</div>
             </div>
         </div>
     </div>
-    
+
     <script src="menu.js"></script>
 </body>
 </html>

@@ -1,61 +1,90 @@
-.press-start-2p-regular {
-    font-family: "Press Start 2P", system-ui;
-    font-weight: 400;
-    font-style: normal;
-  }
-
 body {
-    
     text-align: center;
-    margin: 0px;
-    background-image: url(fondo.webp);
-    background-size: cover;
-    background-repeat: none;
-
+    margin: 0;
+    
+    
     display: flex;
     justify-content: center;
-    
+    align-items: center;
+    height: 100vh;
 }
 
 .contenedor {
-    width: 500px;
-    height: 500px;
+    width: 1100px;
+    height: 700px;
     overflow: hidden;
     border: 2px solid white;
     position: relative;
+    cursor: url('cursor_2.png'), auto;
 }
 
 .tablero {
     font-family: "Press Start 2P", sans-serif;
     font-size: 30px;
-    width: 1500px; 
-    height: 1500px;
+    width: 3300px; 
+    height: 2100px; 
     display: flex;
     position: absolute;
-    background-image: url(AHH.png);
-    background-size: cover;
+    
     transition: transform 0.5s ease-in-out;
-    transform: translate3d(-500px, -500px, 0);
+    transform: translate3d(-1100px, -700px, 0);
 }
-
 
 .opciones {
     position: absolute;
-    width: 500px;
-    height: 500px;
-    display: flex;
-    flex-direction: column;
+    width: 1100px;
+    height: 700px;
+    display: grid;
     align-items: center;
     justify-content: center;
+    align-content: center ;
+
+}
+
+.pantalla-principal { 
+    left: 1100px; 
+    top: 700px; 
+    background-image: url(fondo.webp);
+    background-size: cover;
+    background-repeat: none;
+}
+.pantalla-juego {
+    left: 1100px;
+    top: 0px;
+    background-image: url(fondo2.webp);
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: grid;
+    
+    grid-template-columns: repeat(3, 1fr); 
+    grid-template-rows: auto auto auto; 
+    gap: 20px; 
+    justify-items: center;
+    align-items: center;
 }
 
 
-.pantalla-principal { left: 500px; top: 500px; }
-.pantalla-juego { left: 500px; top: 0px; }
-.pantalla-opciones { left: 1000px; top: 500px; }
-.pantalla-salir { left: 0px; top: 500px; }
+#div1, #div2, #div3 {
+    width: 300px;
+    height: 150px;
+    border: 2px solid black;
+    text-align: center;
+    background-color: white;
+}
 
-.opcion {
+
+#div4 {
+    grid-column: 2 / 3; 
+    width: 300px;
+    height: 150px;
+    border: 2px solid black;
+    text-align: center;
+    background-color: lightgray;
+}
+
+.opcion-juego {
+    grid-column: 1 / 4; 
+    justify-self: center;
     width: 250px;
     height: 80px;
     background: white;
@@ -63,11 +92,49 @@ body {
     align-items: center;
     justify-content: center;
     border-radius: 15px;
-    margin: 10px;
+    transition: 0.3s;
+}
+
+
+.pantalla-instrucciones { 
+    left: 0px;
+    top: 700px; 
+    background-image: url(fondo4.webp);
+    background-size: cover;
+    background-repeat: none;
+
+}
+.pantalla-records { 
+    left: 2200px;
+    top: 700px; 
+    background-image: url(fondo3.webp);
+    background-size: cover;
+    background-repeat: none;
+}
+
+.pantalla-creditos { 
+    left: 1100px; 
+    top: 1400px; 
+    background-image: url(fondo5.webp);
+    background-size: cover;
+    background-repeat: none;
+}
+
+
+
+.opcion {
+    width: 500px;
+    height: 80px;
+    text-shadow: 1px 1px 10px white;
+    display: grid;
+    align-content: center;
+    border-radius: 15px;
+    margin: 20px;
     transition: 0.3s;
 }
 
 .opcion:hover {
     background: rgba(255, 255, 255, 1);
+    
     transform: scale(1.1);
 }
