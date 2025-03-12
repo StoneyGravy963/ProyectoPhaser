@@ -11,14 +11,16 @@ class Juego extends Phaser.Scene {
         this.load.image('canon', './recursos/assets/bomb.png');
         this.load.image('proyectil', './recursos/assets/star.png');
         this.load.image('recurso', './recursos/assets/star.png');
+        this.load.image('attack', './recursos/assets/star.png');
         this.load.image('recursoEspecial', './recursos/assets/diamond.png');
         this.load.spritesheet('dude', './recursos/assets/caballero-der.png', { frameWidth: 192, frameHeight: 95 });    
     }
 
     create() {
         this.add.image(400, 300, 'sky');
-        this.physics.world.setBounds(0, 0, 3200, 800);
-        this.cameras.main.setBounds(0, 0, 3200, 800);
+        // Cambiarrrrrrrrrrrrr
+        this.physics.world.setBounds(0, 0, 1100, 800);
+        this.cameras.main.setBounds(0, 0, 1100, 800);
         this.platforms = this.physics.add.staticGroup();
         this.platforms.create(400, 800, 'ground').setScale(5).refreshBody();
         this.platforms.create(600, 500, 'ground');
@@ -27,7 +29,7 @@ class Juego extends Phaser.Scene {
         this.platforms.create(450, 620, 'ground');
 
         this.player = this.physics.add.sprite(100, 450, 'dude');
-        this.player.setSize(60,70);
+        this.player.setSize(60,65);
         this.player.setScale(0.5);
         this.player.setBounce(0.2);
         this.cameras.main.startFollow(this.player,false,0.2);
@@ -36,6 +38,20 @@ class Juego extends Phaser.Scene {
         this.player.inmune = false; 
         // por si se cae
         this.player.ultimaPosicionSegura = { x: 100, y: 450 };
+
+        // Ataques para cada dirección 
+        this.ataque = this.physics.add.sprite(0, 0, 'attack');
+        this.ataque.setVisible(false);
+        this.ataque.setActive(false);
+        this.ataque.body.setAllowGravity(false);
+        this.ataque.setSize(30, 40);
+        // direccion inicial
+        this.player.voltear = true;
+        // Puede atacar?
+        this.ataqueCooldown = 0;
+
+        // Tecla para atacar
+        this.ataquekey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         
         this.cursors = this.input.keyboard.createCursorKeys();
         this.anims.create({
@@ -53,7 +69,7 @@ class Juego extends Phaser.Scene {
 
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 5 }),
+            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 4 }),
             frameRate: 10,
             repeat: -1
         });
@@ -89,7 +105,7 @@ class Juego extends Phaser.Scene {
         // Grupo de cañones
         this.canones = this.physics.add.group(); 
         // this.crearCanon(770, 170);
-        this.crearCanon(570, 670);
+        // this.crearCanon(570, 670);
         // proyectiles
         this.proyectiles = this.physics.add.group({
             defaultKey: 'proyectil',
@@ -121,7 +137,10 @@ class Juego extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.canones, this.hitPlayer, null, this);
         this.physics.add.overlap(this.player, this.recursos, this.recolectarRecurso, null, this);
         this.physics.add.overlap(this.player, this.recursos, this.recolectarRecurso, null, this);
-        this.physics.add.overlap(this.player, this.recursosEspeciales, this.recolectarRecursoEspecial, null, this); 
+        this.physics.add.overlap(this.player, this.recursosEspeciales, this.recolectarRecursoEspecial, null, this);
+        
+        this.physics.add.overlap(this.ataque, this.vampiros, this.hitEnemy, null, this);
+        this.physics.add.overlap(this.ataque, this.berserkers, this.hitEnemy, null, this);
     }
 
     crearVampiro(x, y) {
@@ -175,7 +194,7 @@ class Juego extends Phaser.Scene {
         canon.setGravityY(300);
         // Dispara de 2 a 4 segundos estaticos para cada uno
         canon.intervaloDisparo = Phaser.Math.Between(2, 4); 
-        console.log(canon.intervaloDisparo);
+        // console.log(canon.intervaloDisparo);
         this.time.addEvent({
             delay: canon.intervaloDisparo * 1000, 
             callback: () => this.dispararProyectil(canon),
@@ -201,9 +220,9 @@ class Juego extends Phaser.Scene {
             let vx = (dx / distancia) * velocidad  ; 
             // let vy = (dy / distancia) * velocidad   ; 
             let vy = -100;
-            console.log("Vx:" +vx);
-            console.log("Vy:" +vy);
-            console.log("Dy:" +dy);
+            // console.log("Vx:" +vx);
+            // console.log("Vy:" +vy);
+            // console.log("Dy:" +dy);
             // Quitar ???
             if(dy< -18 ){
                 vy-=150;
@@ -247,6 +266,41 @@ class Juego extends Phaser.Scene {
         if (this.cursors.up.isDown && this.player.body.touching.down) {
             this.player.setVelocityY(-330);
         }
+
+        // Ataque con ESPACIO
+        // Reducir cooldown
+    if (this.ataqueCooldown > 0) {
+        this.ataqueCooldown -= this.sys.game.loop.delta; 
+    }
+
+    if (Phaser.Input.Keyboard.JustDown(this.ataquekey) && this.ataqueCooldown <= 0) {
+        console.log("aaaaaa");
+        console.log(this.player.voltear);
+        if (this.player.voltear === false) { // Izquierda
+            this.ataque.setPosition(this.player.x - 20, this.player.y);
+        } else if (this.player.voltear === true) { // Derecha
+            this.ataque.setPosition(this.player.x + 20, this.player.y);
+        }
+        this.ataque.setVisible(true);
+        // this.ataque.setActive(true);
+        this.ataque.enableBody(true, this.ataque.x, this.ataque.y, true, true);
+        this.ataque.setVelocityX(this.player.body.velocity.x);
+        // this.ataque.setVelocityY(this.player.body.velocity.y);
+
+        // el ataque dura 2ms
+        this.time.addEvent({
+            delay: 100,
+            callback: () => {
+                this.ataque.setVisible(false);
+                // this.ataque.setActive(false);
+                // this.ataque.destroy(true);
+                this.ataque.disableBody(true,true);
+            },
+            callbackScope: this
+        });
+
+        this.ataqueCooldown = 1000;
+    }
 
          // Logico vamp
          this.vampiros.getChildren().forEach(vampiro => {
@@ -320,7 +374,18 @@ class Juego extends Phaser.Scene {
             this.tiempoEspecialText.setVisible(false);
         }
 
+        // pasar al siguiente nivel
+        if (this.player.x >= 1100 - 50) {//cambiar ancho 
+            this.scene.start('Boss'); 
+        }
 
+
+    }
+
+    hitEnemy(ataque, enemy) {
+        enemy.disableBody(true, true); 
+        this.score += 20;             
+        this.scoreText.setText('Score: ' + this.score);
     }
 
     hitPlayer(player, enemigo) {
