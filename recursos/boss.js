@@ -9,16 +9,24 @@ class Boss extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('back', './recursos/assets/sky.png'); 
-        this.load.image('ground', './recursos/assets/platform.png');   
+        // this.load.image('sky', './recursos/assets/sky.png'); 
+        // this.load.image('ground', './recursos/assets/platform.png');   
         this.load.spritesheet('dude', './recursos/assets/caballero-der.png', { frameWidth: 192, frameHeight: 95 });
-        this.load.image('attack', './recursos/assets/star.png'); 
+        // this.load.image('attack', './recursos/assets/star.png'); 
         this.load.image('dragon', './recursos/assets/bomb.png');      
-        this.load.image('fuego', './recursos/assets/star.png');   
+        this.load.image('fuego', './recursos/assets/star.png'); 
+        // this.load.audio('perder', './recursos/assets/sounds/perder.mp3');
+        this.load.audio('ganar', './recursos/assets/sounds/ganar.mp3');  
+        this.load.audio('background', './recursos/assets/sounds/boss.mp3');  
     }
 
     create() {
-        this.add.image(550, 350, 'back'); 
+        this.musicaF = this.sound.add('background', { loop: true});
+        this.musicaF.play();
+        // sonido
+        this.controlMusica = new Musica(this, this.musicaF);
+        
+        this.add.image(550, 350, 'sky'); 
         this.physics.world.setBounds(0, 0, 1200, 700);
 
         // plataformas
@@ -27,13 +35,14 @@ class Boss extends Phaser.Scene {
         this.platforms.create(200, 500, 'ground'); 
         this.platforms.create(900, 500, 'ground'); 
         this.platforms.create(550, 400, 'ground'); 
-        // para la pausa
-        this.pausa = new Pausa(this);
+        
         this.player = new Player(this, 100, 600);
         this.cameras.main.startFollow(this.player.sprite, false,0.2,0,0,200);
         // vidas que tenia
         this.player.sprite.vidas = this.vidas;
-
+        // para la pausa
+        this.pausa = new Pausa(this, this.player);
+        
         // score y vidas
         this.scoreText = this.add.text(16, 16, 'Score: ' + this.score, { 
             fontSize: '32px', 
@@ -63,13 +72,7 @@ class Boss extends Phaser.Scene {
         this.dragon.posActual = -1; 
         this.dragon.isVulnerable = false;
         this.moverSigPosicion();
-        // se mueve cada 7 segundos
-        this.time.addEvent({
-            delay: 7000, 
-            callback: this.moverSigPosicion,
-            callbackScope: this,
-            loop: true
-        });
+
 
         // fuego
         this.fuegos = this.physics.add.group({
@@ -78,11 +81,14 @@ class Boss extends Phaser.Scene {
         });
 
         // lanzar fuego cada 2 seg
-        this.time.addEvent({
-            delay: 2000, 
-            callback: this.lanzarfuego,
-            callbackScope: this,
-            loop: true
+        this.tweens.add({
+            targets: this.dragon, 
+            alpha: 1,
+            duration: 2000, // vel disparo
+            repeat: -1, // inf
+            onRepeat: () => {
+                this.lanzarfuego(); 
+            }
         });
 
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -124,17 +130,6 @@ class Boss extends Phaser.Scene {
         // this.dragon.x = centerX + Math.cos(this.dragon.angle * Math.PI / 180) * radio;
         // this.dragon.y = centerY + Math.sin(this.dragon.angle * Math.PI / 180) * radio;
 
-        // verificar por que el move to essta haciendo cosas raras
-        const sigPos = this.dragon.posiciones[this.dragon.posActual];
-        const distancia = Phaser.Math.Distance.Between(
-            this.dragon.x, this.dragon.y,
-            sigPos.x, sigPos.y
-        );
-        if (distancia < 10) { 
-            this.dragon.body.setVelocity(0, 0);
-            this.dragon.setPosition(sigPos.x, sigPos.y); 
-            console.log("distancia: " + distancia);
-        }
         // Limpiar fuegos fuera de pantalla
         this.fuegos.getChildren().forEach(fuego => {
             if (fuego.x < 0 || fuego.x > 1400 || fuego.y < 0 || fuego.y > 700) {
@@ -171,18 +166,33 @@ class Boss extends Phaser.Scene {
         const sigPos = this.dragon.posiciones[this.dragon.posActual];
         console.log("posactual: " + this.dragon.posActual);
         console.log("pos siguiente: " + sigPos.x + "," + sigPos.y);
-        
-  
-        this.dragon.body.setVelocity(0, 0); 
-        this.physics.moveTo(this.dragon, sigPos.x, sigPos.y, 200); //vel
-        
-        if (this.dragon.posActual === 4) { 
-            this.dragon.isVulnerable = true;
-            this.dragon.setTint(0xff0000);
-        } else {
-            this.dragon.isVulnerable = false;
-            this.dragon.clearTint();
-        }
+
+        this.tweens.add({
+            targets: this.dragon,
+            x: sigPos.x,
+            y: sigPos.y,
+            duration: 4000, //tarda en llegar a posicion
+            ease: 'Linear',
+            onComplete: () => {
+                
+                if (this.dragon.posActual === 4) {
+                    this.dragon.isVulnerable = true;
+                    this.dragon.setTint(0xff0000);
+                } else {
+                    this.dragon.isVulnerable = false;
+                    this.dragon.clearTint();
+                }
+                // seg en posicion
+                this.tweens.add({
+                    targets: this.dragon,
+                    alpha: 1, 
+                    duration: 4000,
+                    onComplete: () => {
+                        this.moverSigPosicion();
+                    }
+                });
+            }
+        });
     }
     hitPlayer(player, fuegos) {
         if (!player.inmune && this.vidas > 0) {
@@ -205,6 +215,8 @@ class Boss extends Phaser.Scene {
 
             // Perder
             if (this.vidas <= 0) {
+                this.sound.play('perder',{volume:0.5});
+                this.musicaF.destroy();
                 this.physics.pause();
                 player.anims.play('turn');
                 player.setTint(0xff0000);
@@ -220,15 +232,16 @@ class Boss extends Phaser.Scene {
         attack.disableBody(true, true);
         
         if (dragon.vida <= 0) {
+            this.sound.play('perder',{volume:0.5});
             // dragon.destroy();
             dragon.body.enable = false; 
             dragon.setVisible(false)
             this.score += 100; // matar al jefe
             this.scoreText.setText('Score: ' + this.score);
             this.physics.pause();
+            // this.scene.pause();
             this.scene.stop('Boss'); 
             this.scene.launch('GameOver');
         }
-        this.moverSigPosicion();
     }
 }
