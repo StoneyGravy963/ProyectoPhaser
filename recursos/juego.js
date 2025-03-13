@@ -17,6 +17,7 @@ class Juego extends Phaser.Scene {
     }
 
     create() {
+        console.log("hola");
         let background=this.add.image(600,300, 'background').setScale(1.5);
         background.setAlpha(0.4);
 
