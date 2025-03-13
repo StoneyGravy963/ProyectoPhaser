@@ -14,7 +14,7 @@ class Boss extends Phaser.Scene {
         this.load.spritesheet('dude', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 });
         this.load.image('attack', './recursos/assets/star.png');     
         this.load.spritesheet('fuego','./recursos/assets/proyectilBoss.png',{ frameWidth: 96, frameHeight: 96 }); 
-        this.load.spritesheet('dragon','./recursos/assets/dragon.png',{ frameWidth: 170, frameHeight: 141 }); 
+        this.load.spritesheet('dragon','./recursos/assets/mago.png',{ frameWidth: 224, frameHeight: 240 }); 
     }
 
     create() {
@@ -32,8 +32,8 @@ class Boss extends Phaser.Scene {
 
         this.anims.create({
             key: 'anim-dragon', 
-            frames: this.anims.generateFrameNumbers('dragon', { start: 0, end: 5 }), 
-            frameRate: 5, 
+            frames: this.anims.generateFrameNumbers('dragon', { start: 0, end: 14 }), 
+            frameRate: 10, 
             repeat: -1
         });
 
