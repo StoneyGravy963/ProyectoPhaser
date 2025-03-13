@@ -13,7 +13,9 @@ class Player {
         this.sprite.inmune = false;
         this.sprite.ultimaPosicionSegura = { x: x, y: y };
         this.sprite.vidas = 3;
-
+        this.scene.anims.remove('left');
+        this.scene.anims.remove('turn');
+        this.scene.anims.remove('right');
         // ataque
         this.ataque = scene.physics.add.sprite(0, 0, 'ataque');
         this.ataque.setVisible(false);

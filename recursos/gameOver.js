@@ -10,7 +10,10 @@ class GameOver extends Phaser.Scene {
             color: '#ff0000',
             align: 'center'
         }).setOrigin(0.5);
-
+        this.anims.remove('left');
+        this.anims.remove('turn');
+        this.anims.remove('right');
+        this.scene.get('Juego').gameOver = false;
         let resetButton = this.add.graphics();
         resetButton.fillStyle(0x666666, 1);
         resetButton.fillRect(475, 470, 150, 60);
@@ -34,10 +37,7 @@ class GameOver extends Phaser.Scene {
             resetButton.fillRect(475, 470, 150, 60);
         });
         resetButton.on('pointerdown', () => {
-            this.anims.remove('left');
-            this.anims.remove('turn');
-            this.anims.remove('right');
-            this.scene.get('Juego').gameOver = false;
+            
             // this.scene.stop('GameOver');
             this.scene.stop('Juego');
             this.scene.stop('Boss');

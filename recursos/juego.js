@@ -17,6 +17,7 @@ class Juego extends Phaser.Scene {
     }
 
     create() {
+        this.pausa = new Pausa(this);
         this.add.image(400, 300, 'sky');
         // Cambiarrrrrrrrrrrrr
         this.physics.world.setBounds(0, 0, 1100, 800);
@@ -27,7 +28,6 @@ class Juego extends Phaser.Scene {
         this.platforms.create(50, 250, 'ground');
         this.platforms.create(750, 220, 'ground');
         this.platforms.create(450, 620, 'ground');
-
         // Usar Player.js con ataque encapsulado
         this.player = new Player(this, 100, 450);
         this.cameras.main.startFollow(this.player.sprite, false, 0.2);
@@ -202,7 +202,7 @@ class Juego extends Phaser.Scene {
     // }
 
     update() {
-        if (this.gameOver) return;
+        if (this.gameOver || this.pausa.activarPausa()) return;
         
         if (this.cursors.left.isDown) {
             this.player.sprite.setVelocityX(-160);
@@ -333,6 +333,7 @@ class Juego extends Phaser.Scene {
                 this.scene.pause();
                 player.setTint(0xff0000);
                 player.anims.play('turn');
+                
                 this.gameOver = true;
                 this.scene.launch('GameOver');
                 // this.scene.start('GameOver');
