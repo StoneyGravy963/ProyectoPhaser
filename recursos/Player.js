@@ -4,6 +4,7 @@ class Player {
         
         // sprite
         this.sprite = scene.physics.add.sprite(x, y, 'dude');
+        
         this.sprite.setSize(60, 65);
         this.sprite.setScale(0.5);
         this.sprite.setBounce(0.2);

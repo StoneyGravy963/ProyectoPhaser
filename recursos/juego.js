@@ -4,8 +4,11 @@ class Juego extends Phaser.Scene {
     }
 
     preload() {
+        this.load.image('prendido', './recursos/assets/volume.png');
+        this.load.image('muteado', './recursos/assets/mute.png');
         this.load.image('background', './recursos/assets/background1a.png');
-        this.load.image('ground', './recursos/assets/platform.png');
+        this.load.image('plataforma', './recursos/assets/platform.png');
+        this.load.image('suelo', './recursos/assets/ground.png');
         this.load.image('vampiro', './recursos/assets/vampiros.png');
         // this.load.image('berserker', './recursos/assets/bomb.png');
         this.load.image('canon', './recursos/assets/bomb.png');
@@ -13,7 +16,12 @@ class Juego extends Phaser.Scene {
         this.load.image('recurso', './recursos/assets/moneda.png');
         this.load.image('ataque', './recursos/assets/star.png');
         // this.load.image('recursoEspecial', './recursos/assets/diamond.png');
-        this.load.spritesheet('dude', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 });    
+        this.load.spritesheet('dude', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 }); 
+        this.load.audio('recursoespSonido', './recursos/assets/sounds/coin.wav');   
+        this.load.audio('backgroundlvl1', './recursos/assets/sounds/Escena1.mp3');
+        this.load.audio('moneda', './recursos/assets/sounds/coin.mp3');
+        this.load.audio('perder', './recursos/assets/sounds/perder.mp3');
+        this.load.audio('ganar', './recursos/assets/sounds/ganar.mp3');
         this.load.spritesheet('berserker','recursos/assets/berserker.png',{ frameWidth: 42, frameHeight: 38 });
         this.load.spritesheet('recursoEspecial', 'recursos/assets/sacoOro.png', { frameWidth: 128, frameHeight: 128 });
     }
@@ -39,18 +47,26 @@ class Juego extends Phaser.Scene {
 
 
 
-        this.pausa = new Pausa(this);
+        // musica de fondo
+        this.musicaF = this.sound.add('backgroundlvl1', { loop: true});
+        this.musicaF.play();
+        // sonido
+        this.controlMusica = new Musica(this, this.musicaF);
+
         // Cambiarrrrrrrrrrrrr
         this.physics.world.setBounds(0, 0, 1100, 800);
         this.cameras.main.setBounds(0, 0, 1100, 800);
         this.platforms = this.physics.add.staticGroup();
-        this.platforms.create(400, 800, 'ground').setScale(5).refreshBody();
-        this.platforms.create(600, 500, 'ground');
-        this.platforms.create(50, 250, 'ground');
-        this.platforms.create(750, 220, 'ground');
-        this.platforms.create(450, 620, 'ground');
-        // Usar Player.js con ataque encapsulado
+        // this.platforms.create(400, 800, 'plataforma').setScale(5).refreshBody();
+       this.platforms.create(400, 755, 'suelo').refreshBody();
+        this.platforms.create(400, 785, 'suelo');   
+        this.platforms.create(600, 500, 'plataforma');
+        this.platforms.create(50, 250, 'plataforma');
+        this.platforms.create(750, 220, 'plataforma');
+        this.platforms.create(450, 620, 'plataforma');
         this.player = new Player(this, 100, 450);
+        // this.player.sprite.setScale(1.1);
+        this.pausa = new Pausa(this, this.player);
         this.cameras.main.startFollow(this.player.sprite, false, 0.2);
         
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -86,7 +102,7 @@ class Juego extends Phaser.Scene {
 
         // Grupo de cañones
         this.canones = this.physics.add.group(); 
-        // this.crearCanon(770, 170);
+        this.crearCanon(370, 170);
         // this.crearCanon(570, 670);
         // proyectiles
         this.proyectiles = this.physics.add.group({
@@ -132,6 +148,9 @@ class Juego extends Phaser.Scene {
     }
     crearBerserker(x, y) {
         let berserker = this.berserkers.create(x, y,'berserker');
+        berserker.setScale(1.7);
+        berserker.setSize(24,34);
+        berserker.setOffset(8,4);
         berserker.setGravityY(300);
         berserker.velPatrulla = 80;
         berserker.dirPatrulla = 1; 
@@ -152,6 +171,7 @@ class Juego extends Phaser.Scene {
         recurso.disableBody(true, true); 
         this.score += 10; 
         this.scoreText.setText('Score: ' + this.score); 
+        this.sound.play('moneda',{volume:0.2});
     }
     crearRecursoEspecial(x, y) {
         let recurso = this.recursosEspeciales.create(x, y, 'recursoEspecial');
@@ -165,6 +185,7 @@ class Juego extends Phaser.Scene {
         recurso.disableBody(true, true); 
         this.score += 50; 
         this.scoreText.setText('Score: ' + this.score);
+        this.sound.play('recursoespSonido',{volume:0.2});
     }
 
     // crearCanon(x, y) {
@@ -179,11 +200,14 @@ class Juego extends Phaser.Scene {
         // Dispara de 2 a 4 segundos estaticos para cada uno
         canon.intervaloDisparo = Phaser.Math.Between(2, 4); 
         // console.log(canon.intervaloDisparo);
-        this.time.addEvent({
-            delay: canon.intervaloDisparo * 1000, 
-            callback: () => this.dispararProyectil(canon),
-            callbackScope: this,
-            loop: true
+        this.tweens.add({
+            targets: canon,
+            alpha: 1,
+            duration: canon.intervaloDisparo * 1000,
+            repeat: -1,
+            onRepeat: () => {
+                this.dispararProyectil(canon);
+            }
         });
         return canon;
     }
@@ -203,13 +227,13 @@ class Juego extends Phaser.Scene {
             // Necsito ajustar esto
             let vx = (dx / distancia) * velocidad  ; 
             // let vy = (dy / distancia) * velocidad   ; 
-            let vy = -100;
+            let vy = -50;
             // console.log("Vx:" +vx);
             // console.log("Vy:" +vy);
             // console.log("Dy:" +dy);
             // Quitar ???
             if(dy< -18 ){
-                vy-=150;
+                vy-=200;
             }
         
             proyectil.setVelocity(vx, vy); 
@@ -333,7 +357,8 @@ class Juego extends Phaser.Scene {
         }
 
         // pasar al siguiente nivel
-        if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
+        if (this.player.sprite.x >= 1100 - 0) {//cambiar ancho 
+            this.musicaF.destroy();
             this.scene.start('Boss', { score: this.score, vidas: this.vidas });
         }
     }
@@ -363,6 +388,8 @@ class Juego extends Phaser.Scene {
             
             // Perder
             if (this.vidas <= 0) {
+                this.sound.play('perder',{volume:0.3});
+                this.musicaF.destroy();
                 this.physics.pause();
                 this.scene.pause();
                 player.setTint(0xff0000);
