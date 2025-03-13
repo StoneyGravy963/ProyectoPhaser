@@ -30,7 +30,11 @@ function moverCamara(direccion) {
 }
 
 
-/*Funciones para seleccion de personaje (Drag and drop)*/
+/*Funciones para seleccion de personaje (Drag and drop & localStorage)*/
+function guardarDatos() {
+    localStorage.nombre = document.getElementById("nombre").value;
+
+}
 
 function allowDrop(ev) {
     ev.preventDefault();
@@ -40,12 +44,18 @@ function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
 }
 
+
 function drop(ev, statusId) {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
+    var draggedElement = document.getElementById(data);
+    var dropZone = document.getElementById("div4");
+
+    dropZone.innerHTML = "";
+    dropZone.appendChild(draggedElement);
+    localStorage.setItem("personajeSeleccionado", data);
 }
 
-function dragEnter(statusId) {
-    document.getElementById(statusId).innerText = "Imagen dentro del área";
-}
+
+
+

@@ -20,35 +20,57 @@
 
             
             <div class="opciones pantalla-juego">
-                <div id="div1" ondrop="drop(event, 'status1')" ondragover="allowDrop(event)" ondragenter="dragEnter('status1')" ondragleave="dragLeave('status1')">
-                    <img src="Green_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="drag1" width="250" height="150">
+                <div class="Titulo-Personajes">
+                    <h2>Selecciona tu personaje</h2>
+                </div>
+                
+                <div id="div1" ondrop="drop(event, 'status1')"  ondragover="allowDrop(event)" ondragenter="dragEnter('status1')" ondragleave="dragLeave('status1')">
+                    <img src="Green_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="P1" width="250" height="150">
                 </div>
         
-                <div id="div2" ondrop="drop(event, 'status2')" ondragover="allowDrop(event)" ondragenter="dragEnter('status2')" ondragleave="dragLeave('status2')">
-                    <img src="Red_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="drag2" width="250" height="150">
+                <div id="div2" ondrop="drop(event, 'status2')"  ondragover="allowDrop(event)" ondragenter="dragEnter('status2')" ondragleave="dragLeave('status2')">
+                    <img src="Red_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="P2" width="250" height="150">
                 </div>
-                <div id="div3" ondrop="drop(event, 'status3')" ondragover="allowDrop(event)" ondragenter="dragEnter('status3')" ondragleave="dragLeave('status3')">
-                    <img src="Blue_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="drag3" width="250" height="150">
+                <div id="div3" ondrop="drop(event, 'status3')"  ondragover="allowDrop(event)" ondragenter="dragEnter('status3')" ondragleave="dragLeave('status3')">
+                    <img src="Blue_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="P3" width="250" height="150">
                 </div>
-                <div id="div4" ondrop="drop(event, 'status4')" ondragover="allowDrop(event)" ondragenter="dragEnter('status4')" ondragleave="dragLeave('status4')">
+                <div id="div4" ondrop="drop(event, 'status4')"  ondragover="allowDrop(event)" ondragenter="dragEnter('status4')" ondragleave="dragLeave('status4')">
                     
                 </div>
 
                 <div class="opcion-juego" onclick="moverCamara('centro')">Volver</div>
+                <div class="opcion-jugar" onclick="moverCamara('izquierda')">Continuar</div>
+            </div>
+
+            <div class="opciones pantalla-nombre">
+                <div class="nombre">
+                    <label class="Titulo-nombre" for="nombre">Nombre de Jugador</label>
+                    <input type="text" id="nombre" />
+                    
+                </div>
+                <input class="nombre-boton" type="button" onclick="guardarDatos()" value="EMPEZAR">
+                <div class="opcion-nombre" onclick="moverCamara('derecha')">Volver</div>
             </div>
 
             
             <div class="opciones pantalla-records">
-                <div class="opcion">Ver Records</div>
-                <div class="opcion">Restablecer</div>
-                <div class="opcion" onclick="moverCamara('centro')">Volver</div>
+                <div class="Encabezado">#</div>
+                <div class="Encabezado">Nombre</div>
+                <div class="Encabezado">Puntuacion</div>
+                <div class="opcion-record" onclick="moverCamara('centro')">Volver</div>
             </div>
 
            
             <div class="opciones pantalla-instrucciones">
-                <div class="opcion">Desarrolladores</div>
-                <div class="opcion">Más Información</div>
-                <div class="opcion" onclick="moverCamara('centro')">Volver</div>
+                
+                <div class="Teclas">
+                    <h2>Movimiento</h1>
+                    <img class="movimiento" src="teclas.png"></im>
+                </div>
+                <div class="Ataque">
+                    <h2>Ataque</h2>
+                </div>
+                <div class="opcion-instrucciones" onclick="moverCamara('centro')">Volver</div>
             </div>
 
             <div class="opciones pantalla-creditos">
