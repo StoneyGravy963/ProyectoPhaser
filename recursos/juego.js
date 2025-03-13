@@ -4,9 +4,9 @@ class Juego extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('sky', './recursos/assets/sky.png');
+        this.load.image('background', './recursos/assets/background1.png');
         this.load.image('ground', './recursos/assets/platform.png');
-        this.load.image('vampiro', './recursos/assets/bomb.png');
+        this.load.image('vampiro', './recursos/assets/vampiros.png');
         this.load.image('berserker', './recursos/assets/bomb.png');
         this.load.image('canon', './recursos/assets/bomb.png');
         this.load.image('proyectil', './recursos/assets/star.png');
@@ -17,8 +17,10 @@ class Juego extends Phaser.Scene {
     }
 
     create() {
+        let background=this.add.image(600,300, 'background').setScale(1.5);
+        background.setAlpha(0.4);
+
         this.pausa = new Pausa(this);
-        this.add.image(400, 300, 'sky');
         // Cambiarrrrrrrrrrrrr
         this.physics.world.setBounds(0, 0, 1100, 800);
         this.cameras.main.setBounds(0, 0, 1100, 800);
@@ -231,6 +233,13 @@ class Juego extends Phaser.Scene {
             let direccionJugador = this.player.sprite.voltear ? -1 : 1;
             let direccionVampiro = Math.sign(this.player.sprite.x - vampiro.x);
 
+            if(this.player.sprite.x<=vampiro.x){
+                vampiro.setFlipX(true);
+            }
+            else{
+                vampiro.setFlipX(false);
+            }
+
             if (direccionJugador === direccionVampiro) {
                 vampiro.setVelocity(0);
                 vampiro.setAlpha(0.2);
@@ -299,9 +308,9 @@ class Juego extends Phaser.Scene {
         }
 
         // pasar al siguiente nivel
-        if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
-            this.scene.start('Boss', { score: this.score, vidas: this.vidas });
-        }
+        // if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
+        //     this.scene.start('Boss', { score: this.score, vidas: this.vidas });
+        // }
     }
 
     hitEnemy(ataque, enemy) {
