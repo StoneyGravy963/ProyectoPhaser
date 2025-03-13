@@ -6,7 +6,7 @@ class Pausa {
         this.texto = scene.add.text(
             scene.physics.world.bounds.width / 2, 
             scene.physics.world.bounds.height / 2, 
-            'PAUSED', 
+            'Pausa', 
             {
                 fontSize: '64px',
                 fill: '#fff'

@@ -29,7 +29,6 @@ class Boss extends Phaser.Scene {
         this.platforms.create(550, 400, 'ground'); 
         // para la pausa
         this.pausa = new Pausa(this);
-        
         this.player = new Player(this, 100, 600);
         this.cameras.main.startFollow(this.player.sprite, false,0.2,0,0,200);
         // vidas que tenia
