@@ -15,9 +15,10 @@ class Boss extends Phaser.Scene {
         this.load.spritesheet('dude', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 });
         this.load.image('attack', './recursos/assets/star.png');     
         this.load.spritesheet('fuego','./recursos/assets/proyectilBoss.png',{ frameWidth: 96, frameHeight: 96 }); 
-        this.load.spritesheet('dragon','./recursos/assets/dragon.png',{ frameWidth: 170, frameHeight: 141 }); 
+        // this.load.spritesheet('dragon','./recursos/assets/dragon.png',{ frameWidth: 170, frameHeight: 141 }); 
         this.load.audio('ganar', './recursos/assets/sounds/ganar.mp3');  
-        this.load.audio('background', './recursos/assets/sounds/boss.mp3');  
+        this.load.audio('background', './recursos/assets/sounds/boss.mp3'); 
+        this.load.spritesheet('dragon-volar', './recursos/assets/dragon.png', { frameWidth: 79, frameHeight: 69 }); 
 
     }
 
@@ -29,7 +30,7 @@ class Boss extends Phaser.Scene {
         
         let background=this.add.image(600,300, 'sky').setScale(1);
         background.setAlpha(0.6);
-        this.physics.world.setBounds(0, 0, 1200, 700);
+        this.physics.world.setBounds(0, 0, 1200, 800);
 
         //SPRITES
         this.anims.create({
@@ -39,17 +40,24 @@ class Boss extends Phaser.Scene {
             repeat: -1
         });
 
+        // this.anims.create({
+        //     key: 'anim-dragon', 
+        //     frames: this.anims.generateFrameNumbers('dragon', { start: 0, end: 5 }), 
+        //     frameRate: 5, 
+        //     repeat: -1
+        // });
         this.anims.create({
-            key: 'anim-dragon', 
-            frames: this.anims.generateFrameNumbers('dragon', { start: 0, end: 5 }), 
-            frameRate: 5, 
+            key: 'volar',
+            frames: this.anims.generateFrameNumbers('dragon-volar', { start: 0, end: 3 }), 
+            frameRate: 5,
             repeat: -1
         });
 
-
+            
         // plataformas
         this.platforms = this.physics.add.staticGroup();
-        this.platforms.create(600, 700, 'plataforma').setScale(3).refreshBody(); 
+        // this.platforms.create(600, 700, 'plataforma').setScale(3).refreshBody(); 
+        this.platforms.create(400, 730, 'suelo').refreshBody();
         this.platforms.create(200, 500, 'plataforma'); 
         this.platforms.create(900, 500, 'plataforma'); 
         this.platforms.create(550, 400, 'plataforma'); 
@@ -73,12 +81,14 @@ class Boss extends Phaser.Scene {
         }).setScrollFactor(0);
 
         // dragon
-        this.dragon = this.physics.add.sprite(700, 230, 'dragon'); 
-        this.dragon.play('anim-dragon');
-        this.dragon.setScale(0.3);
+        this.dragon = this.physics.add.sprite(700, 230, 'dragon-volar'); 
+        this.dragon.play('volar');
+        this.dragon.setScale(1.5);
+        this.dragon.setSize(45,40);
+        this.dragon.setOffset(10,20);
         this.dragon.setCollideWorldBounds(true);
         this.dragon.vida = 5; 
-        this.dragon.setScale(3); 
+        // this.dragon.setScale(3); 
         this.dragon.body.setAllowGravity(false);
         // this.dragon.angle = 0;
         this.dragon.posiciones = [ 
@@ -163,6 +173,8 @@ class Boss extends Phaser.Scene {
             for (let i = 0; i < 3; i++) {
                 let fuego = this.fuegos.get(this.dragon.x, this.dragon.y);
                 if (fuego) {
+                    fuego.setSize(30,30);
+                    fuego.setOffset(30,70);
                     fuego.setActive(true).setVisible(true);
                     fuego.play('anim-fuego');
                     

@@ -58,13 +58,14 @@ class Juego extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, 1100, 800);
         this.platforms = this.physics.add.staticGroup();
         // this.platforms.create(400, 800, 'plataforma').setScale(5).refreshBody();
-        let suelo = this.platforms.create(400, 755, 'suelo').refreshBody();
+       this.platforms.create(400, 755, 'suelo').refreshBody();
         this.platforms.create(400, 785, 'suelo');   
         this.platforms.create(600, 500, 'plataforma');
         this.platforms.create(50, 250, 'plataforma');
         this.platforms.create(750, 220, 'plataforma');
         this.platforms.create(450, 620, 'plataforma');
         this.player = new Player(this, 100, 450);
+        // this.player.sprite.setScale(1.1);
         this.pausa = new Pausa(this, this.player);
         this.cameras.main.startFollow(this.player.sprite, false, 0.2);
         
@@ -147,6 +148,9 @@ class Juego extends Phaser.Scene {
     }
     crearBerserker(x, y) {
         let berserker = this.berserkers.create(x, y,'berserker');
+        berserker.setScale(1.7);
+        berserker.setSize(24,34);
+        berserker.setOffset(8,4);
         berserker.setGravityY(300);
         berserker.velPatrulla = 80;
         berserker.dirPatrulla = 1; 
@@ -353,7 +357,7 @@ class Juego extends Phaser.Scene {
         }
 
         // pasar al siguiente nivel
-        if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
+        if (this.player.sprite.x >= 1100 - 0) {//cambiar ancho 
             this.musicaF.destroy();
             this.scene.start('Boss', { score: this.score, vidas: this.vidas });
         }
