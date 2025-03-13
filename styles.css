@@ -234,6 +234,9 @@ body {
 .movimiento{
     width: 200px;
 }
+.movimiento2{
+    width: 300px;
+}
 .opcion-instrucciones:hover {
     background: rgba(255, 255, 255, 1);
     
