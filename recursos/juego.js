@@ -4,7 +4,7 @@ class Juego extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('sky', './recursos/assets/sky.png');
+        this.load.image('background', './recursos/assets/background1.png');
         this.load.image('ground', './recursos/assets/platform.png');
         this.load.image('vampiro', './recursos/assets/bomb.png');
         this.load.image('berserker', './recursos/assets/bomb.png');
@@ -13,11 +13,17 @@ class Juego extends Phaser.Scene {
         this.load.image('recurso', './recursos/assets/star.png');
         this.load.image('attack', './recursos/assets/star.png');
         this.load.image('recursoEspecial', './recursos/assets/diamond.png');
-        this.load.spritesheet('dude', './recursos/assets/caballero-der.png', { frameWidth: 192, frameHeight: 95 });    
+        this.load.spritesheet('dude', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 });    
+        // this.load.spritesheet('recursoEspecial', './recursos/assets/sacoOro.png', { frameWidth: 128, frameHeight: 128 });   //Para posible sprite
+
     }
 
     create() {
-        this.add.image(400, 300, 'sky');
+        let background=this.add.image(600, 300, 'background').setScale(1.5);
+        background.setAlpha(0.5);
+        
+
+
         // Cambiarrrrrrrrrrrrr
         this.physics.world.setBounds(0, 0, 1100, 800);
         this.cameras.main.setBounds(0, 0, 1100, 800);
@@ -78,6 +84,15 @@ class Juego extends Phaser.Scene {
         
 ;       this.crearRecursoEspecial(300, 300); 
         this.crearRecursoEspecial(500, 600);
+
+        this.anims.create({
+            key: 'recursoEspecialAnimacion',
+            frames: this.anims.generateFrameNumbers('recursoEspecial', { start: 0, end: 6 }),
+            frameRate: 10,
+            repeat: 0
+        });
+
+
 
         // temp recursos esp
         this.tiempoEspecial = 10000; 
@@ -177,6 +192,9 @@ class Juego extends Phaser.Scene {
         recurso.setOffset(160,108);
         return recurso;
     }
+    
+
+
     recolectarRecursoEspecial(player, recurso) {
         recurso.disableBody(true, true); 
         this.score += 50; 
