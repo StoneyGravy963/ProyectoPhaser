@@ -4,21 +4,40 @@ class Juego extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('background', './recursos/assets/background1.png');
+        this.load.image('background', './recursos/assets/background1a.png');
         this.load.image('ground', './recursos/assets/platform.png');
         this.load.image('vampiro', './recursos/assets/vampiros.png');
-        this.load.image('berserker', './recursos/assets/bomb.png');
+        // this.load.image('berserker', './recursos/assets/bomb.png');
         this.load.image('canon', './recursos/assets/bomb.png');
         this.load.image('proyectil', './recursos/assets/star.png');
-        this.load.image('recurso', './recursos/assets/star.png');
+        this.load.image('recurso', './recursos/assets/moneda.png');
         this.load.image('ataque', './recursos/assets/star.png');
-        this.load.image('recursoEspecial', './recursos/assets/diamond.png');
+        // this.load.image('recursoEspecial', './recursos/assets/diamond.png');
         this.load.spritesheet('dude', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 });    
+        this.load.spritesheet('berserker','recursos/assets/berserker.png',{ frameWidth: 42, frameHeight: 38 });
+        this.load.spritesheet('recursoEspecial', 'recursos/assets/sacoOro.png', { frameWidth: 128, frameHeight: 128 });
     }
 
     create() {
         let background=this.add.image(600,300, 'background').setScale(1.5);
-        background.setAlpha(0.4);
+        background.setAlpha(0.6);
+
+        //SPRITES
+        this.anims.create({
+            key: 'run-berserker',         // Nombre de la animación
+            frames: this.anims.generateFrameNumbers('berserker', { start: 0, end: 9 }), 
+            frameRate: 10,     
+            repeat: -1          
+        });
+        this.anims.create({
+            key: 'spawn-especial', 
+            frames: this.anims.generateFrameNumbers('recursoEspecial', { start: 0, end: 6 }), 
+            frameRate: 10, 
+            repeat: 0 
+        });
+        
+
+
 
         this.pausa = new Pausa(this);
         // Cambiarrrrrrrrrrrrr
@@ -112,18 +131,21 @@ class Juego extends Phaser.Scene {
         return vampiro;
     }
     crearBerserker(x, y) {
-        let berserker = this.berserkers.create(x, y, 'berserker');
+        let berserker = this.berserkers.create(x, y,'berserker');
         berserker.setGravityY(300);
         berserker.velPatrulla = 80;
         berserker.dirPatrulla = 1; 
         berserker.setCollideWorldBounds(true); 
         berserker.rangoPatrulla = 150; 
         berserker.XInicial = berserker.x; 
+        berserker.anims.play('run-berserker');
         return berserker;
     }
     crearRecurso(x, y) {
         let recurso = this.recursos.create(x, y, 'recurso');
-        
+        recurso.setScale(0.6);
+        recurso.setSize(25,25);
+        recurso.setOffset(20,20);
         return recurso;
     }
     recolectarRecurso(player, recurso) {
@@ -133,9 +155,10 @@ class Juego extends Phaser.Scene {
     }
     crearRecursoEspecial(x, y) {
         let recurso = this.recursosEspeciales.create(x, y, 'recursoEspecial');
-        recurso.setScale(0.1);
-        recurso.setSize(30,30);
-        recurso.setOffset(160,108);
+        recurso.setScale(0.6);
+        recurso.setSize(25,25);
+        recurso.setOffset(55,55);
+        recurso.anims.play('spawn-especial');
         return recurso;
     }
     recolectarRecursoEspecial(player, recurso) {
@@ -255,8 +278,10 @@ class Juego extends Phaser.Scene {
             // Cambiar direccion si se pasa de rango
             if (berserker.x > berserker.XInicial + berserker.rangoPatrulla) {
                 berserker.dirPatrulla = -1;
+                berserker.setFlipX(true);
             } else if (berserker.x < berserker.XInicial - berserker.rangoPatrulla) {
                 berserker.dirPatrulla = 1;
+                berserker.setFlipX(false);
             }
         });
         // Proyectiles
@@ -308,9 +333,9 @@ class Juego extends Phaser.Scene {
         }
 
         // pasar al siguiente nivel
-        // if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
-        //     this.scene.start('Boss', { score: this.score, vidas: this.vidas });
-        // }
+        if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
+            this.scene.start('Boss', { score: this.score, vidas: this.vidas });
+        }
     }
 
     hitEnemy(ataque, enemy) {

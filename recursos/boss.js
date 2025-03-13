@@ -9,16 +9,18 @@ class Boss extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('back', './recursos/assets/sky.png'); 
+        this.load.image('back', './recursos/assets/background2.png'); 
         this.load.image('ground', './recursos/assets/platform.png');   
-        this.load.spritesheet('dude', './recursos/assets/caballero-der.png', { frameWidth: 192, frameHeight: 95 });
+        this.load.spritesheet('dude', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 });
         this.load.image('attack', './recursos/assets/star.png'); 
         this.load.image('dragon', './recursos/assets/bomb.png');      
-        this.load.image('fuego', './recursos/assets/star.png');   
+        this.load.image('fuego', './recursos/assets/proyectilBoss.png');  
+        this.load.spritesheet('fuego','./recursos/assets/proyectilBoss.png',{ frameWidth: 94, frameHeight: 75 }); 
     }
 
     create() {
-        this.add.image(550, 350, 'back'); 
+        let background=this.add.image(600,300, 'back').setScale(1);
+        background.setAlpha(0.6);
         this.physics.world.setBounds(0, 0, 1200, 700);
 
         // plataformas
