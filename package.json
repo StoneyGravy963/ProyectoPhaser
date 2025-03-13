@@ -12,5 +12,13 @@
     "express": "^4.21.2",
     "phaser": "^3.88.2"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StoneyGravy963/ProyectoPhaser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/StoneyGravy963/ProyectoPhaser/issues"
+  },
+  "homepage": "https://github.com/StoneyGravy963/ProyectoPhaser#readme",
   "description": ""
 }
