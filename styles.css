@@ -265,49 +265,59 @@ body {
 }
 
 
-.pantalla-records { 
+.pantalla-records {
     left: 2200px;
     top: 700px; 
     background-image: url(fondo3.webp);
     background-size: cover;
     background-repeat: none;
-    display: grid;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
     
-}
-.pantalla-records h2{
-    
-    text-shadow: 1px 1px 10px white;
-    justify-content: center;
-}
-.pantalla-records table{
-    grid-row: 2;
-    align-content: center;
-    justify-content: center;
-    width: 1000px;
-    font-size: 1.5rem;
-    border: 2px solid;
 }
 
+.pantalla-records h2 {
+    text-shadow: 1px 1px 10px white;
+    text-align: center;
+    margin-bottom: 10px; 
+}
+
+.table-container {
+    font-size: 1.5rem;
+    width: 1000px;
+    max-height: 400px; 
+    overflow-y: auto; 
+    border: 2px solid #000;
+    display: flex;
+    justify-content: center;
+}
+
+.pantalla-records table {
+    width: 1000px
+    
+}
+
+.pantalla-records th, .pantalla-records td {
+    
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
 
 .opcion-record {
     width: 200px;
     height: 80px;
     text-shadow: 1px 1px 10px white;
-    display: grid;
-    grid-column: span 2;
+    display: flex;
     justify-content: center;
-    align-content: center;
     align-items: center;
     border-radius: 15px;
-    margin: 20px;
+    margin-top: 20px; /* Espaciado superior para separarlo de la tabla */
     transition: 0.3s;
 }
 
-
-
 .opcion-record:hover {
     background: rgba(255, 255, 255, 1);
-    
     transform: scale(1.1);
 }
 
