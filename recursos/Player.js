@@ -3,7 +3,11 @@ class Player {
         this.scene = scene;
         
         // sprite
-        this.sprite = scene.physics.add.sprite(x, y, 'dude');
+
+        const personajeSeleccionado = sessionStorage.getItem("personajeSeleccionado") || "P1";
+        const spriteKey = personajeSeleccionado === "P1" ? 'dude' : 'dude2';
+
+        this.sprite = scene.physics.add.sprite(x, y, spriteKey);
         
         this.sprite.setSize(60, 65);
         this.sprite.setScale(0.5);
@@ -28,18 +32,18 @@ class Player {
         // animaciones
         this.scene.anims.create({
             key: 'left',
-            frames: this.scene.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+            frames: this.scene.anims.generateFrameNumbers(spriteKey, { start: 0, end: 3 }),
             frameRate: 10,
             repeat: -1
         });
         this.scene.anims.create({
             key: 'turn',
-            frames: [{ key: 'dude', frame: 4 }],
+            frames: [{ key: spriteKey, frame: 4 }],
             frameRate: 20
         });
         this.scene.anims.create({
             key: 'right',
-            frames: this.scene.anims.generateFrameNumbers('dude', { start: 0, end: 4 }),
+            frames: this.scene.anims.generateFrameNumbers(spriteKey, { start: 0, end: 4 }),
             frameRate: 10,
             repeat: -1
         });

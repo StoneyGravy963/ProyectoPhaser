@@ -37,18 +37,26 @@ function guardarDatos() {
     const fecha = new Date().toLocaleString();
     const puntuacion = 0;
 
-    // Crear un objeto con los datos del jugador
-    const jugador = {
-        nombre: nombre,
-        fecha: fecha,
-        puntuacion: puntuacion
-    };
-
-    // Cargar el array existente de records desde localStorage (o inicializar uno vacío si no existe)
+    // Cargar el array existente de records desde localStorage
     let records = JSON.parse(localStorage.getItem("records")) || [];
 
-    // Añadir el nuevo jugador al array
-    records.push(jugador);
+    // Buscar si el nombre ya existe en los records
+    const jugadorExistenteIndex = records.findIndex(jugador => jugador.nombre.toLowerCase() === nombre.toLowerCase());
+
+    if (jugadorExistenteIndex === -1) {
+        // Si el jugador no existe, crear un nuevo registro
+        const jugador = {
+            nombre: nombre,
+            fecha: fecha,
+            puntuacion: puntuacion
+        };
+        records.push(jugador);
+        // Guardar el índice del nuevo jugador en sessionStorage
+        sessionStorage.setItem("jugadorIndex", records.length - 1);
+    } else {
+        // Si el jugador ya existe, no crear un nuevo registro, pero guardar su índice
+        sessionStorage.setItem("jugadorIndex", jugadorExistenteIndex);
+    }
 
     // Guardar el array actualizado en localStorage
     localStorage.setItem("records", JSON.stringify(records));
@@ -63,7 +71,6 @@ function guardarDatos() {
     new Phaser.Game(config);
     console.log("HOLAAAAAAAAAAAAAAAAA");
 }
-
 function allowDrop(ev) {
     ev.preventDefault();
 }
