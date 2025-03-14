@@ -90,6 +90,9 @@ function cargarRecords() {
 
     let records = JSON.parse(localStorage.getItem("records")) || [];
 
+    // Ordenar los jugadores por puntuación de mayor a menor
+    records.sort((a, b) => b.puntuacion - a.puntuacion);
+
     records.forEach((jugador, index) => {
         let fila = `
             <tr>
