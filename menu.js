@@ -39,7 +39,15 @@ function guardarDatos() {
     const regex = /^[a-zA-Z0-9_]{4,8}$/;
 
     if (!regex.test(nombre)) {
-        alert("El nombre debe tener entre 4 y 8 caracteres y solo puede contener letras, números y guion bajo (_).");
+        alertify.alert(
+            'Error al capturar el nombre', 
+            'Solo puede contener:<br>' +
+            '- Entre 4 y 8 caracteres<br>' +
+            '- Letras<br>' +
+            '- Números<br>' +
+            '- Guiones bajos (_) ',
+            function(){ alertify.error('Corrige el nombre e intenta nuevamente.'); }
+        );
         return;
     }
 
