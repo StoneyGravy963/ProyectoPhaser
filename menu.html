@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Carrois+Gothic+SC&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    
+    
+    <title>Menú Juego</title>
+    <style>
+        #contenedor-juego {
+            display: none;
+        }
+        canvas {
+            border: 3px solid rgb(170, 99, 99);
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <div class="tablero">
+            <div class="opciones pantalla-principal">
+                <div class="opcion" onclick="moverCamara('abajo')">Empezar</div>
+                <div class="opcion" onclick="moverCamara('izquierda')">Records</div>
+                <div class="opcion" onclick="moverCamara('derecha')">Instrucciones</div>
+                <div class="opcion" onclick="moverCamara('arriba')">Créditos</div>
+            </div>
+
+            <div class="opciones pantalla-juego">
+                <div class="Titulo-Personajes">
+                    <h2>Selecciona tu personaje</h2>
+                </div>
+                <div id="div1" ondrop="drop(event, 'status1')" ondragover="allowDrop(event)" ondragenter="dragEnter()" ondragleave="dragLeave()">
+                    <img src="Green_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="P1" width="250" height="150">
+                </div>
+                <div id="div2" ondrop="drop(event, 'status2')" ondragover="allowDrop(event)" ondragenter="dragEnter()" ondragleave="dragLeave()">
+                    <img src="Red_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="P2" width="250" height="150">
+                </div>
+                <div id="div4" ondrop="drop(event, 'status4')" ondragover="allowDrop(event)" ondragenter="dragEnter()" ondragleave="dragLeave()"></div>
+                <div class="opcion-juego" onclick="moverCamara('centro')">Volver</div>
+                <div class="opcion-jugar" onclick="moverCamara('izquierda')">Continuar</div>
+            </div>
+
+            <div class="opciones pantalla-nombre">
+                <div class="nombre">
+                    <label class="Titulo-nombre" for="nombre">Nombre de Jugador</label>
+                    <input type="text" id="nombre" />
+                </div>
+                <input class="nombre-boton" type="button" onclick="guardarDatos()" value="EMPEZAR">
+                <div class="opcion-nombre" onclick="moverCamara('derecha')">Volver</div>
+            </div>
+
+            <div class="opciones pantalla-records">
+                
+                 <h2 class="text-center">Tabla de Jugadores</h2>
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Puntuación</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Jugador 1</td>
+                            <td>1500</td>
+                            <td>04/05/25</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Jugador 2</td>
+                            <td>1200</td>
+                            <td>04/05/25</td>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="opcion-record" onclick="moverCamara('centro')">Volver</div>
+            </div>
+
+            <div class="opciones pantalla-instrucciones">
+                <div class="Teclas">
+                    <h2>Movimiento</h2>
+                    <img class="movimiento" src="teclas.png">
+                </div>
+                <div class="Ataque">
+                    <h2>Ataque</h2>
+                    <img class="movimiento2" src="space2.png"></img>
+                </div>
+                <div class="opcion-instrucciones" onclick="moverCamara('centro')">Volver</div>
+            </div>
+
+            <div class="opciones pantalla-creditos">
+                <div>Elias</div>
+                <div>Jaime</div>
+                <div>Yahir</div>
+                <canvas id="canvas1" width="200" height="200"></canvas>
+                <canvas id="canvas2" width="200" height="200"></canvas>
+                <canvas id="canvas3" width="200" height="200"></canvas>
+                <div class="opcion-creditos" onclick="moverCamara('centro')">Volver</div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="contenedor-juego">
+        <script src="./recursos/Musica.js"></script>
+        <script src="./recursos/Pausa.js"></script>
+        <script src="./recursos/Player.js"></script>
+        <script src="./recursos/juego.js"></script>
+        <script src="./recursos/boss.js"></script>
+        <script src="./recursos/gameOver.js"></script>
+        <script src="./recursos/config.js"></script>
+        <script src="menu.js"></script>
+    </div>
+</body>
+</html>
