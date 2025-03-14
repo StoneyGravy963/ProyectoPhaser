@@ -433,10 +433,16 @@ class Juego extends Phaser.Scene {
         }
 
         // pasar al siguiente nivel
+<<<<<<< HEAD
+        // if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
+        //     this.scene.start('Boss', { score: this.score, vidas: this.vidas });
+        // }
+=======
         if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
             this.musicaF.destroy();
             this.scene.start('Boss', { score: this.score, vidas: this.vidas });
         }
+>>>>>>> 3f2accfe156f4f0240c7ae9ccd92b9a1f6c5c7b6
     }
 
     hitEnemy(ataque, enemy) {
