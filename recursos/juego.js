@@ -30,6 +30,7 @@ class Juego extends Phaser.Scene {
         this.load.spritesheet('ataque','recursos/assets/dinamita.png',{ frameWidth: 64, frameHeight: 64});
         this.load.spritesheet('explosion','recursos/assets/explosion.png',{ frameWidth: 192, frameHeight: 192});
         this.load.spritesheet('dude-ataque','recursos/assets/dude-ataque.png',{ frameWidth: 192, frameHeight: 120});
+        // this.load.spritesheet('dude-ataque','recursos/assets/dude-ataque.png',{ frameWidth: 192, frameHeight: 120});
 
     }
 
