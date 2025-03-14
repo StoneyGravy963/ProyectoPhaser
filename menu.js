@@ -109,7 +109,7 @@ function drop(ev, statusId) {
     dropZone.innerHTML = "";
     dropZone.appendChild(draggedElement);
 
-    // Guardar el personaje seleccionado en sessionStorage (temporal)
+    // // Guardar el personaje seleccionado en sessionStorage (temporal)
     sessionStorage.setItem("personajeSeleccionado", data);
 }
 
@@ -124,8 +124,7 @@ function dragEnter(statusId) {
 // }
 
 
-let records = JSON.parse(localStorage.getItem("records")) || [];
-records.sort((a, b) => b.puntuacion - a.puntuacion);
+
 function mostrarRecords() {
     let records = JSON.parse(localStorage.getItem("records")) || [];
     records.sort((a, b) => b.puntuacion - a.puntuacion);
