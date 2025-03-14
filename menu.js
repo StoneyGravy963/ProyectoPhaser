@@ -136,4 +136,22 @@ function mostrarRecords() {
         recordsContainer.appendChild(puntuacion);
     });
 }
+/*Funciones para creditos*/
+function myCanvas(canvasId, imageSrc) {
+    let canvas = document.getElementById(canvasId);
+    let ctx = canvas.getContext("2d");
+    let img = new Image();
+    img.src = imageSrc;
+
+    img.onload = function () {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
+}
+
+// Llamar a la función cuando la página haya cargado
+window.onload = function () {
+    myCanvas("canvas1", "retrato.jpg");
+    myCanvas("canvas2", "retrato2.jpg");
+    myCanvas("canvas3", "retrato3.png");
+};
 
