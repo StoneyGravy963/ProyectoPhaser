@@ -78,12 +78,7 @@ class Juego extends Phaser.Scene {
 ;       this.crearRecursoEspecial(300, 300); 
         this.crearRecursoEspecial(500, 600);
 
-        // temp recursos esp
-        this.tiempoEspecial = 10000; 
-        this.tiempoEspecialText = this.add.text(16, 84, 'Rec-Especial: 10s', {
-            fontSize: '32px',
-            fill: '#000'
-        }).setScrollFactor(0);
+        
 
         // Recursos
         this.recursos = this.physics.add.staticGroup();
@@ -111,18 +106,43 @@ class Juego extends Phaser.Scene {
             maxSize: 10 //Limite proyectiles a la vez
         });
 
+        let records = JSON.parse(localStorage.getItem("records")) || [];
+        const jugadorIndex = parseInt(sessionStorage.getItem("jugadorIndex"));
+        const jugador = (records.length > 0 && jugadorIndex >= 0 && jugadorIndex < records.length) ? records[jugadorIndex] : { nombre: "Jugador", fecha: new Date().toLocaleString() };
+
+        // temp recursos esp
+        this.tiempoEspecial = 10000; 
+        this.tiempoEspecialText = this.add.text(400, 16, 'Rec-Especial: 10s', {
+            fontSize: '32px',
+            fill: '#fff'
+        }).setScrollFactor(0);
+
         // Puntaje
         this.score = 0;
         this.scoreText = this.add.text(16, 16, 'Score: 0', { 
             fontSize: '32px', 
-            fill: '#000' 
+            fill: '#fff' 
         }).setScrollFactor(0); 
 
         // vidas
         this.vidas = 3; 
         this.vidasText = this.add.text(16, 50, 'Vidas: 3', { 
             fontSize: '32px',
-            fill: '#000'
+            fill: '#fff'
+        }).setScrollFactor(0);
+        this.aliasText = this.add.text(800, 50, `Alias: ${jugador.nombre}`, { 
+            fontSize: '32px',
+            fill: '#fff'
+        }).setScrollFactor(0);
+    
+        this.nivelText = this.add.text(800, 16, 'Nivel: 1', { 
+            fontSize: '32px',
+            fill: '#fff'
+        }).setScrollFactor(0);
+    
+        this.fechaText = this.add.text(770, 665, `Fecha: ${jugador.fecha}`, { 
+            fontSize: '32px',
+            fill: '#fff'
         }).setScrollFactor(0);
 
         this.physics.add.collider(this.player.sprite, this.platforms);
@@ -397,9 +417,9 @@ class Juego extends Phaser.Scene {
                     const puntuacionAnterior = records[jugadorIndex].puntuacion;
                     if (this.score > puntuacionAnterior) {
                         records[jugadorIndex].puntuacion = this.score;
-                        records[jugadorIndex].fecha = new Date().toLocaleString(); 
+                        records[jugadorIndex].fecha = new Date().toLocaleDateString();
+                        localStorage.setItem("records", JSON.stringify(records));
                     }
-                    localStorage.setItem("records", JSON.stringify(records));
                 }
                 this.sound.play('perder',{volume:0.3});
                 this.musicaF.destroy();
@@ -414,4 +434,5 @@ class Juego extends Phaser.Scene {
             }
         }
     }
+    
 }

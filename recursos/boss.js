@@ -85,14 +85,32 @@ class Boss extends Phaser.Scene {
         this.pausa = new Pausa(this, this.player);
         
         // score y vidas
+        let records = JSON.parse(localStorage.getItem("records")) || [];
+        const jugadorIndex = parseInt(sessionStorage.getItem("jugadorIndex"));
+        const jugador = (records.length > 0 && jugadorIndex >= 0 && jugadorIndex < records.length) ? records[jugadorIndex] : { nombre: "Jugador", fecha: new Date().toLocaleString() };
+
         this.scoreText = this.add.text(16, 16, 'Score: ' + this.score, { 
             fontSize: '32px', 
-            fill: '#000' 
+            fill: '#fff' 
         }).setScrollFactor(0); 
 
         this.vidasText = this.add.text(16, 50, 'Vidas: ' + this.vidas, { 
             fontSize: '32px',
-            fill: '#000'
+            fill: '#fff'
+        }).setScrollFactor(0);
+        this.aliasText = this.add.text(800, 50, `Alias: ${jugador.nombre}`, { 
+            fontSize: '32px',
+            fill: '#fff'
+        }).setScrollFactor(0);
+    
+        this.nivelText = this.add.text(800, 16, 'Nivel: 1', { 
+            fontSize: '32px',
+            fill: '#fff'
+        }).setScrollFactor(0);
+    
+        this.fechaText = this.add.text(770, 665, `Fecha: ${jugador.fecha}`, { 
+            fontSize: '32px',
+            fill: '#fff'
         }).setScrollFactor(0);
 
         // dragon
@@ -264,7 +282,7 @@ class Boss extends Phaser.Scene {
             const puntuacionAnterior = records[jugadorId].puntuacion;
             if (puntuacionActual > puntuacionAnterior) {
                 records[jugadorId].puntuacion = puntuacionActual;
-                records[jugadorId].fecha = new Date().toLocaleString(); 
+                records[jugadorIndex].fecha = new Date().toLocaleDateString();
                 localStorage.setItem("records", JSON.stringify(records));
             }
         }

@@ -34,7 +34,7 @@ function moverCamara(direccion) {
 function guardarDatos() {
     // Obtener los datos del jugador
     const nombre = document.getElementById("nombre").value;
-    const fecha = new Date().toLocaleString();
+    const fecha = new Date().toLocaleDateString();
     const puntuacion = 0;
 
     // Cargar el array existente de records desde localStorage
@@ -142,4 +142,6 @@ function mostrarRecords() {
         recordsContainer.appendChild(puntuacion);
     });
 }
+
+
 
