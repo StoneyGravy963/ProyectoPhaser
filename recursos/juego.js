@@ -357,7 +357,7 @@ class Juego extends Phaser.Scene {
         }
 
         // pasar al siguiente nivel
-        if (this.player.sprite.x >= 1100 - 0) {//cambiar ancho 
+        if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
             this.musicaF.destroy();
             this.scene.start('Boss', { score: this.score, vidas: this.vidas });
         }

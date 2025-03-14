@@ -32,8 +32,36 @@ function moverCamara(direccion) {
 
 /*Funciones para seleccion de personaje (Drag and drop & localStorage)*/
 function guardarDatos() {
-    localStorage.nombre = document.getElementById("nombre").value;
+    // Obtener los datos del jugador
+    const nombre = document.getElementById("nombre").value;
+    const fecha = new Date().toLocaleString();
+    const puntuacion = 0;
 
+    // Crear un objeto con los datos del jugador
+    const jugador = {
+        nombre: nombre,
+        fecha: fecha,
+        puntuacion: puntuacion
+    };
+
+    // Cargar el array existente de records desde localStorage (o inicializar uno vacío si no existe)
+    let records = JSON.parse(localStorage.getItem("records")) || [];
+
+    // Añadir el nuevo jugador al array
+    records.push(jugador);
+
+    // Guardar el array actualizado en localStorage
+    localStorage.setItem("records", JSON.stringify(records));
+
+    // Guardar el personaje seleccionado (temporal, usando sessionStorage)
+    const personajeSeleccionado = sessionStorage.getItem("personajeSeleccionado") || "P1";
+    sessionStorage.setItem("numeroPersonaje", personajeSeleccionado);
+
+    // Iniciar el juego
+    document.querySelector(".contenedor").style.display = "none";
+    document.getElementById("contenedor-juego").style.display = "block";
+    new Phaser.Game(config);
+    console.log("HOLAAAAAAAAAAAAAAAAA");
 }
 
 function allowDrop(ev) {
@@ -45,17 +73,67 @@ function drag(ev) {
 }
 
 
+// function drop(ev, statusId) {
+//     ev.preventDefault();
+//     var data = ev.dataTransfer.getData("text");
+//     var draggedElement = document.getElementById(data);
+//     var dropZone = document.getElementById("div4");
+
+//     dropZone.innerHTML = "";
+//     dropZone.appendChild(draggedElement);
+//     localStorage.setItem("personajeSeleccionado", data);
+// }
+
 function drop(ev, statusId) {
     ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    var draggedElement = document.getElementById(data);
-    var dropZone = document.getElementById("div4");
+    const data = ev.dataTransfer.getData("text");
+    const draggedElement = document.getElementById(data);
+    const dropZone = document.getElementById("div4");
 
+    // Si ya hay un personaje en la dropZone, devolverlo a su posición original
+    if (dropZone.children.length > 0) {
+        const personajeAnterior = dropZone.children[0];
+        const idPersonajeAnterior = personajeAnterior.id;
+        const divOriginal = document.getElementById("div" + idPersonajeAnterior.charAt(1));
+        divOriginal.appendChild(personajeAnterior);
+    }
+
+    // Colocar el nuevo personaje en la dropZone
     dropZone.innerHTML = "";
     dropZone.appendChild(draggedElement);
-    localStorage.setItem("personajeSeleccionado", data);
+
+    // Guardar el personaje seleccionado en sessionStorage (temporal)
+    sessionStorage.setItem("personajeSeleccionado", data);
 }
 
+function dragEnter(statusId) {
+    const dropZone = document.getElementById("div4");
+    dropZone.style.backgroundColor = "lightgreen"; 
+}
+
+// function dragLeave(statusId) {
+//     const dropZone = document.getElementById("div4");
+//     // dropZone.style.backgroundColor = "lightgray"; 
+// }
 
 
+let records = JSON.parse(localStorage.getItem("records")) || [];
+records.sort((a, b) => b.puntuacion - a.puntuacion);
+function mostrarRecords() {
+    let records = JSON.parse(localStorage.getItem("records")) || [];
+    records.sort((a, b) => b.puntuacion - a.puntuacion);
+
+    const recordsContainer = document.querySelector(".pantalla-records");
+    records.forEach((jugador, index) => {
+        const numero = document.createElement("div");
+        numero.textContent = index + 1;
+        const nombre = document.createElement("div");
+        nombre.textContent = jugador.nombre;
+        const puntuacion = document.createElement("div");
+        puntuacion.textContent = jugador.puntuacion;
+        recordsContainer.appendChild(numero);
+        recordsContainer.appendChild(nombre);
+        recordsContainer.appendChild(puntuacion);
+    });
+}
 

@@ -3,7 +3,6 @@ class Musica {
         this.scene = scene;
         this.musica = musica; 
         this.muteado = false;
-        //icono a la derecha
         this.icono = this.scene.add.image(
             this.scene.cameras.main.width - 30, //x,y
             30, 

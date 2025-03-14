@@ -4,13 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Carrois+Gothic+SC&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
     <link rel="stylesheet" href="styles.css">
     <title>Menú Juego</title>
+    <style>
+        #contenedor-juego {
+            display: none;
+        }
+        canvas {
+            border: 3px solid rgb(170, 99, 99);
+        }
+    </style>
 </head>
 <body>
     <div class="contenedor">
         <div class="tablero">
-            
             <div class="opciones pantalla-principal">
                 <div class="opcion" onclick="moverCamara('abajo')">Empezar</div>
                 <div class="opcion" onclick="moverCamara('izquierda')">Records</div>
@@ -18,26 +26,20 @@
                 <div class="opcion" onclick="moverCamara('arriba')">Créditos</div>
             </div>
 
-            
             <div class="opciones pantalla-juego">
                 <div class="Titulo-Personajes">
                     <h2>Selecciona tu personaje</h2>
                 </div>
-                
-                <div id="div1" ondrop="drop(event, 'status1')"  ondragover="allowDrop(event)" ondragenter="dragEnter('status1')" ondragleave="dragLeave('status1')">
+                <div id="div1" ondrop="drop(event, 'status1')" ondragover="allowDrop(event)" ondragenter="dragEnter()" ondragleave="dragLeave()">
                     <img src="Green_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="P1" width="250" height="150">
                 </div>
-        
-                <div id="div2" ondrop="drop(event, 'status2')"  ondragover="allowDrop(event)" ondragenter="dragEnter('status2')" ondragleave="dragLeave('status2')">
+                <div id="div2" ondrop="drop(event, 'status2')" ondragover="allowDrop(event)" ondragenter="dragEnter()" ondragleave="dragLeave()">
                     <img src="Red_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="P2" width="250" height="150">
                 </div>
-                <div id="div3" ondrop="drop(event, 'status3')"  ondragover="allowDrop(event)" ondragenter="dragEnter('status3')" ondragleave="dragLeave('status3')">
+                <div id="div3" ondrop="drop(event, 'status3')" ondragover="allowDrop(event)" ondragenter="dragEnter()" ondragleave="dragLeave()">
                     <img src="Blue_Knight_Portrait.webp" draggable="true" ondragstart="drag(event)" id="P3" width="250" height="150">
                 </div>
-                <div id="div4" ondrop="drop(event, 'status4')"  ondragover="allowDrop(event)" ondragenter="dragEnter('status4')" ondragleave="dragLeave('status4')">
-                    
-                </div>
-
+                <div id="div4" ondrop="drop(event, 'status4')" ondragover="allowDrop(event)" ondragenter="dragEnter()" ondragleave="dragLeave()"></div>
                 <div class="opcion-juego" onclick="moverCamara('centro')">Volver</div>
                 <div class="opcion-jugar" onclick="moverCamara('izquierda')">Continuar</div>
             </div>
@@ -46,13 +48,11 @@
                 <div class="nombre">
                     <label class="Titulo-nombre" for="nombre">Nombre de Jugador</label>
                     <input type="text" id="nombre" />
-                    
                 </div>
                 <input class="nombre-boton" type="button" onclick="guardarDatos()" value="EMPEZAR">
                 <div class="opcion-nombre" onclick="moverCamara('derecha')">Volver</div>
             </div>
 
-            
             <div class="opciones pantalla-records">
                 <div class="Encabezado">#</div>
                 <div class="Encabezado">Nombre</div>
@@ -60,12 +60,10 @@
                 <div class="opcion-record" onclick="moverCamara('centro')">Volver</div>
             </div>
 
-           
             <div class="opciones pantalla-instrucciones">
-                
                 <div class="Teclas">
-                    <h2>Movimiento</h1>
-                    <img class="movimiento" src="teclas.png"></im>
+                    <h2>Movimiento</h2>
+                    <img class="movimiento" src="teclas.png">
                 </div>
                 <div class="Ataque">
                     <h2>Ataque</h2>
@@ -82,6 +80,16 @@
         </div>
     </div>
 
-    <script src="menu.js"></script>
+    
+    <div id="contenedor-juego">
+        <script src="./recursos/Musica.js"></script>
+        <script src="./recursos/Pausa.js"></script>
+        <script src="./recursos/Player.js"></script>
+        <script src="./recursos/juego.js"></script>
+        <script src="./recursos/boss.js"></script>
+        <script src="./recursos/gameOver.js"></script>
+        <script src="./recursos/config.js"></script>
+        <script src="menu.js"></script>
+    </div>
 </body>
 </html>
