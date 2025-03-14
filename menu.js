@@ -32,8 +32,25 @@ function moverCamara(direccion) {
 
 /*Funciones para seleccion de personaje (Drag and drop & localStorage)*/
 function guardarDatos() {
-    // Obtener los datos del jugador
-    const nombre = document.getElementById("nombre").value;
+    // Obtener el nombre del jugador
+    const nombre = document.getElementById("nombre").value.trim();
+
+    // Validación: Solo letras, dígitos y barra baja, longitud entre 4 y 8 caracteres
+    const regex = /^[a-zA-Z0-9_]{4,8}$/;
+
+    if (!regex.test(nombre)) {
+        alertify.alert(
+            'Error al capturar el nombre', 
+            'Solo puede contener:<br>' +
+            '- Entre 4 y 8 caracteres<br>' +
+            '- Letras<br>' +
+            '- Números<br>' +
+            '- Guiones bajos (_) ',
+            function(){ alertify.error('Corrige el nombre e intenta nuevamente.'); }
+        );
+        return;
+    }
+
     const fecha = new Date().toLocaleDateString();
     const puntuacion = 0;
 
@@ -45,32 +62,51 @@ function guardarDatos() {
 
     if (jugadorExistenteIndex === -1) {
         // Si el jugador no existe, crear un nuevo registro
-        const jugador = {
-            nombre: nombre,
-            fecha: fecha,
-            puntuacion: puntuacion
-        };
+        const jugador = { nombre, fecha, puntuacion };
         records.push(jugador);
-        // Guardar el índice del nuevo jugador en sessionStorage
         sessionStorage.setItem("jugadorIndex", records.length - 1);
     } else {
-        // Si el jugador ya existe, no crear un nuevo registro, pero guardar su índice
+        // Si el jugador ya existe, solo actualiza el índice en sessionStorage
         sessionStorage.setItem("jugadorIndex", jugadorExistenteIndex);
     }
 
     // Guardar el array actualizado en localStorage
     localStorage.setItem("records", JSON.stringify(records));
 
-    // Guardar el personaje seleccionado (temporal, usando sessionStorage)
+    // Guardar personaje seleccionado
     const personajeSeleccionado = sessionStorage.getItem("personajeSeleccionado") || "P1";
     sessionStorage.setItem("numeroPersonaje", personajeSeleccionado);
 
-    // Iniciar el juego
+    // Ocultar pantalla inicial y mostrar el juego
     document.querySelector(".contenedor").style.display = "none";
     document.getElementById("contenedor-juego").style.display = "block";
     window.game = new Phaser.Game(config);
-    console.log("HOLAAAAAAAAAAAAAAAAA");
 }
+
+// Función para cargar los datos en la tabla
+function cargarRecords() {
+    const tablaBody = document.querySelector(".table tbody");
+    tablaBody.innerHTML = ""; 
+
+    let records = JSON.parse(localStorage.getItem("records")) || [];
+
+    records.forEach((jugador, index) => {
+        let fila = `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${jugador.nombre}</td>
+                <td>${jugador.puntuacion}</td>
+                <td>${jugador.fecha}</td>
+            </tr>
+        `;
+        tablaBody.innerHTML += fila;
+    });
+}
+
+
+document.addEventListener("DOMContentLoaded", cargarRecords);
+
+
 function allowDrop(ev) {
     ev.preventDefault();
 }
@@ -142,6 +178,21 @@ function mostrarRecords() {
         recordsContainer.appendChild(puntuacion);
     });
 }
+/*Funciones para creditos*/
+function myCanvas(canvasId, imageSrc) {
+    let canvas = document.getElementById(canvasId);
+    let ctx = canvas.getContext("2d");
+    let img = new Image();
+    img.src = imageSrc;
 
+    img.onload = function () {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
+}
 
+window.onload = function () {
+    myCanvas("canvas1", "retrato.jpg");
+    myCanvas("canvas2", "retrato2.jpg");
+    myCanvas("canvas3", "retrato3.png");
+};
 
