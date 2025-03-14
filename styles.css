@@ -252,8 +252,6 @@ body {
 
 .movimiento{
     width: 200px;
-    
-    
 }
 .movimiento2{
     width: 300px;
@@ -302,6 +300,9 @@ body {
     margin: 20px;
     transition: 0.3s;
 }
+
+
+
 
 
 
@@ -368,6 +369,16 @@ body {
     transform: scale(1.1);
 }
 
+#contenedor-juego {
+    display: none;
+    width: 1100px;
+    height: 700px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #222;
+}
 #contenedor-juego {
     display: none;
     width: 1100px;

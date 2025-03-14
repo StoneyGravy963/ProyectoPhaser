@@ -161,23 +161,6 @@ function dragEnter(statusId) {
 
 
 
-function mostrarRecords() {
-    let records = JSON.parse(localStorage.getItem("records")) || [];
-    records.sort((a, b) => b.puntuacion - a.puntuacion);
-
-    const recordsContainer = document.querySelector(".pantalla-records");
-    records.forEach((jugador, index) => {
-        const numero = document.createElement("div");
-        numero.textContent = index + 1;
-        const nombre = document.createElement("div");
-        nombre.textContent = jugador.nombre;
-        const puntuacion = document.createElement("div");
-        puntuacion.textContent = jugador.puntuacion;
-        recordsContainer.appendChild(numero);
-        recordsContainer.appendChild(nombre);
-        recordsContainer.appendChild(puntuacion);
-    });
-}
 /*Funciones para creditos*/
 function myCanvas(canvasId, imageSrc) {
     let canvas = document.getElementById(canvasId);

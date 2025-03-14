@@ -18,9 +18,9 @@ class GameOver extends Phaser.Scene {
         resetButton.fillStyle(0x666666, 1);
         resetButton.fillRect(475, 470, 150, 60);
         resetButton.setScrollFactor(0);
-        resetButton.setInteractive(new Phaser.Geom.Rectangle(475, 470, 150, 60), Phaser.Geom.Rectangle.Contains);
+        resetButton.setInteractive(new Phaser.Geom.Rectangle(475, 470, 200, 60), Phaser.Geom.Rectangle.Contains);
 
-        let resetText = this.add.text(550, 500, 'RESET', {
+        let resetText = this.add.text(550, 500, 'Menu Principal', {
             fontFamily: 'Arial',
             fontSize: '24px',
             color: '#ffffff'

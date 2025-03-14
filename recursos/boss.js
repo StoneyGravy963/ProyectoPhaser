@@ -9,7 +9,7 @@ class Boss extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('back', './recursos/assets/background2.png'); 
+        this.load.image('back', './recursos/assets/bg2a.png'); 
         this.load.image('plataforma', './recursos/assets/platform.png');   
         this.load.image('suelo', './recursos/assets/platform.png');   
         // this.load.spritesheet('dude2', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 }); 
@@ -26,6 +26,9 @@ class Boss extends Phaser.Scene {
     }
 
     create() {
+        let back=this.add.image(600,300, 'back').setScale(1.5);
+        back.setAlpha(0.6);
+
         this.musicaF = this.sound.add('background', { loop: true});
         this.musicaF.play();
         // sonido
@@ -164,17 +167,27 @@ class Boss extends Phaser.Scene {
 
     update() {
         if (this.pausa.activarPausa()) return;
-        if (this.cursors.left.isDown) {
+        if (this.cursors.left.isDown && this.player.sprite.anims.currentAnim.key !== 'dude-atacar') {
+            // Si el jugador presiona izquierda y no está en la animación 'dude-atacar'
             this.player.sprite.setVelocityX(-160);
             this.player.sprite.setFlipX(true);
             this.player.sprite.anims.play('left', true);
             this.player.sprite.voltear = false;
-        } else if (this.cursors.right.isDown) {
+        } else if (this.cursors.right.isDown && this.player.sprite.anims.currentAnim.key !== 'dude-atacar') {
+            // Si el jugador presiona derecha y no está en la animación 'dude-atacar'
             this.player.sprite.setVelocityX(160);
             this.player.sprite.setFlipX(false);
             this.player.sprite.anims.play('right', true);
             this.player.sprite.voltear = true;
-        } else {
+        } else if (this.cursors.space.isDown) {
+            // Ejecutar animación de ataque sin la verificación de que no esté ya en 'dude-atacar'
+            if (this.player.sprite.anims.currentAnim.key !== 'dude-atacar'&&this.player.cooldown<=0) {
+                this.player.sprite.anims.play('dude-atacar');
+                
+            }
+        }
+
+        else {
             this.player.sprite.setVelocityX(0);
             this.player.sprite.anims.play('turn');
         }
