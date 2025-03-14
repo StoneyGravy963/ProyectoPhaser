@@ -32,8 +32,17 @@ function moverCamara(direccion) {
 
 /*Funciones para seleccion de personaje (Drag and drop & localStorage)*/
 function guardarDatos() {
-    // Obtener los datos del jugador
-    const nombre = document.getElementById("nombre").value;
+    // Obtener el nombre del jugador
+    const nombre = document.getElementById("nombre").value.trim();
+
+    // Validación: Solo letras, dígitos y barra baja, longitud entre 4 y 8 caracteres
+    const regex = /^[a-zA-Z0-9_]{4,8}$/;
+
+    if (!regex.test(nombre)) {
+        alert("El nombre debe tener entre 4 y 8 caracteres y solo puede contener letras, números y guion bajo (_).");
+        return;
+    }
+
     const fecha = new Date().toLocaleString();
     const puntuacion = 0;
 
