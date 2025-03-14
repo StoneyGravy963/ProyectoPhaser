@@ -18,7 +18,7 @@ class Player {
         this.scene.anims.remove('turn');
         this.scene.anims.remove('right');
         // ataque
-        this.ataque = scene.physics.add.sprite(0, 0, 'ataque');
+        this.ataque = scene.physics.add.sprite(0, 0);
         this.ataque.setVisible(false);
         this.ataque.body.setAllowGravity(false);
         this.ataque.setSize(30, 40);
@@ -43,9 +43,19 @@ class Player {
             frameRate: 10,
             repeat: -1
         });
+        this.scene.anims.create({
+            key: 'dude-atacar',
+            frames: this.scene.anims.generateFrameNumbers('dude-ataque', { start: 0, end: 5 }),
+            frameRate: 5,
+            repeat: 0
+        });
     }
 
     uPataque() {
+        
+
+
+        
         // cooldown
         if (this.cooldown > 0) {
             this.cooldown -= this.scene.sys.game.loop.delta;
@@ -53,6 +63,13 @@ class Player {
 
         // ataque
         if (Phaser.Input.Keyboard.JustDown(this.ataquekey) && this.cooldown <= 0) {
+            this.sprite.play('dude-atacar');
+            this.sprite.once('animationcomplete', () => {
+                setTimeout(() => {
+                    this.sprite.play('dude');
+                }, 3000); // Retraso de 100ms
+            });
+
             console.log("aaaaaa");
             console.log(this.sprite.voltear);
             if (this.sprite.voltear === false) { // Izquierda
@@ -60,7 +77,7 @@ class Player {
             } else if (this.sprite.voltear === true) { // Derecha
                 this.ataque.setPosition(this.sprite.x + 20, this.sprite.y);
             }
-            this.ataque.setVisible(true);
+            this.ataque.setVisible(false);
             this.ataque.enableBody(true, this.ataque.x, this.ataque.y, true, true);
             this.ataque.setVelocityX(this.sprite.body.velocity.x);
 

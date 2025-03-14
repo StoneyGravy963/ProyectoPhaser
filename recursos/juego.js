@@ -11,12 +11,11 @@ class Juego extends Phaser.Scene {
         this.load.image('suelo', './recursos/assets/ground.png');
         this.load.image('vampiro', './recursos/assets/vampiros.png');
         // this.load.image('berserker', './recursos/assets/bomb.png');
-        this.load.image('canon', './recursos/assets/bomb.png');
         this.load.image('proyectil', './recursos/assets/star.png');
         this.load.image('recurso', './recursos/assets/moneda.png');
-        this.load.image('ataque', './recursos/assets/star.png');
+        
         // this.load.image('recursoEspecial', './recursos/assets/diamond.png');
-        this.load.spritesheet('dude', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 }); 
+        
         this.load.audio('recursoespSonido', './recursos/assets/sounds/coin.wav');   
         this.load.audio('backgroundlvl1', './recursos/assets/sounds/Escena1.mp3');
         this.load.audio('moneda', './recursos/assets/sounds/coin.mp3');
@@ -24,10 +23,18 @@ class Juego extends Phaser.Scene {
         this.load.audio('ganar', './recursos/assets/sounds/ganar.mp3');
         this.load.spritesheet('berserker','recursos/assets/berserker.png',{ frameWidth: 42, frameHeight: 38 });
         this.load.spritesheet('recursoEspecial', 'recursos/assets/sacoOro.png', { frameWidth: 128, frameHeight: 128 });
+        this.load.spritesheet('dude', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 }); 
+
+        this.load.spritesheet('canon','recursos/assets/canon.png',{ frameWidth: 192, frameHeight: 110 });
+        this.load.spritesheet('canon-ataque','recursos/assets/canon-disparar.png',{ frameWidth: 192, frameHeight: 110 });
+        this.load.spritesheet('ataque','recursos/assets/dinamita.png',{ frameWidth: 64, frameHeight: 64});
+        this.load.spritesheet('explosion','recursos/assets/explosion.png',{ frameWidth: 192, frameHeight: 192});
+        this.load.spritesheet('dude-ataque','recursos/assets/dude-ataque.png',{ frameWidth: 192, frameHeight: 120});
+
     }
 
     create() {
-        let background=this.add.image(600,300, 'background').setScale(1.5);
+        let background=this.add.image(600,300, 'background').setScale(0.4);
         background.setAlpha(0.6);
 
         //SPRITES
@@ -43,6 +50,38 @@ class Juego extends Phaser.Scene {
             frameRate: 10, 
             repeat: 0 
         });
+
+        this.anims.create({
+            key: 'canon-iddle', 
+            frames: this.anims.generateFrameNumbers('canon', { start: 0, end: 5 }), 
+            frameRate: 5, 
+            repeat: -1 
+        });
+        this.anims.create({
+            key: 'canon-atacar', 
+            frames: this.anims.generateFrameNumbers('canon-ataque', { start: 0, end: 5 }), 
+            frameRate: 20, 
+            repeat: 0 
+        });
+        this.anims.create({
+            key: 'ataque-anim', 
+            frames: this.anims.generateFrameNumbers('ataque', { start: 0, end: 5 }), 
+            frameRate: 10, 
+            repeat: -1 
+        });
+        this.anims.create({
+            key: 'explosion-anim',
+            frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 8 }),
+            frameRate: 10,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'dude-atacar',
+            frames: this.anims.generateFrameNumbers('dude-ataque', { start: 0, end: 5 }),
+            frameRate: 100,
+            repeat: 0
+        });
+        
         
 
 
@@ -197,10 +236,16 @@ class Juego extends Phaser.Scene {
     crearCanon(x, y) {
         let canon = this.canones.create(x, y, 'canon');
         canon.setGravityY(300);
+        canon.setScale(0.5);
+        canon.setSize(70,70);
+        canon.setOffset(55,20);
+        canon.play('canon-iddle');
         // Dispara de 2 a 4 segundos estaticos para cada uno
         canon.intervaloDisparo = Phaser.Math.Between(2, 4); 
+       
         // console.log(canon.intervaloDisparo);
         this.tweens.add({
+            
             targets: canon,
             alpha: 1,
             duration: canon.intervaloDisparo * 1000,
@@ -209,13 +254,30 @@ class Juego extends Phaser.Scene {
                 this.dispararProyectil(canon);
             }
         });
+        
         return canon;
     }
     dispararProyectil(canon) {
         let proyectil = this.proyectiles.get(canon.x, canon.y);
         if (proyectil) {
             proyectil.setActive(true);
+            proyectil.setScale(0.5);
             proyectil.setVisible(true);
+            proyectil.play('ataque-anim');
+            proyectil.once('animationcomplete', () => {
+                proyectil.setVelocity(0, 0);
+                proyectil.play('ataque');
+            });
+
+            canon.play('canon-atacar');
+
+            if((this.player.sprite.x - canon.x)<0){
+                canon.setFlipX(true);
+            }
+            else{
+                canon.setFlipX(false);
+            }
+
             
             // Nunca pense usar teorema de pitagoras pero aqui andamos
             let dx = this.player.sprite.x - canon.x; 
@@ -235,9 +297,12 @@ class Juego extends Phaser.Scene {
             if(dy< -18 ){
                 vy-=200;
             }
-        
+            canon.once('animationcomplete', () => {
+                canon.play('canon-iddle');
+            });
             proyectil.setVelocity(vx, vy); 
         }
+        
     }
     // dispararProyectil(canon) {
     //     let proyectil = this.proyectiles.get(canon.x, canon.y);
@@ -253,17 +318,27 @@ class Juego extends Phaser.Scene {
     update() {
         if (this.gameOver || this.pausa.activarPausa()) return;
         
-        if (this.cursors.left.isDown) {
+        if (this.cursors.left.isDown && this.player.sprite.anims.currentAnim.key !== 'dude-atacar') {
+            // Si el jugador presiona izquierda y no está en la animación 'dude-atacar'
             this.player.sprite.setVelocityX(-160);
             this.player.sprite.setFlipX(true);
             this.player.sprite.anims.play('left', true);
             this.player.sprite.voltear = false;
-        } else if (this.cursors.right.isDown) {
+        } else if (this.cursors.right.isDown && this.player.sprite.anims.currentAnim.key !== 'dude-atacar') {
+            // Si el jugador presiona derecha y no está en la animación 'dude-atacar'
             this.player.sprite.setVelocityX(160);
             this.player.sprite.setFlipX(false);
             this.player.sprite.anims.play('right', true);
             this.player.sprite.voltear = true;
-        } else {
+        } else if (this.cursors.space.isDown) {
+            // Ejecutar animación de ataque sin la verificación de que no esté ya en 'dude-atacar'
+            if (this.player.sprite.anims.currentAnim.key !== 'dude-atacar'&&this.player.cooldown<=0) {
+                this.player.sprite.anims.play('dude-atacar');
+
+            }
+        }
+
+        else {
             this.player.sprite.setVelocityX(0);
             this.player.sprite.anims.play('turn');
         }
@@ -357,19 +432,27 @@ class Juego extends Phaser.Scene {
         }
 
         // pasar al siguiente nivel
-        if (this.player.sprite.x >= 1100 - 0) {//cambiar ancho 
+        if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
             this.musicaF.destroy();
             this.scene.start('Boss', { score: this.score, vidas: this.vidas });
         }
     }
 
     hitEnemy(ataque, enemy) {
+
         enemy.disableBody(true, true); 
         this.score += 20;             
         this.scoreText.setText('Score: ' + this.score);
     }
 
     hitPlayer(player, enemigo) {
+        if (enemigo.texture.key === 'ataque') {
+            enemigo.play('explosion-anim'); // enemigo ya es el proyectil
+            enemigo.once('animationcomplete', () => {
+                enemigo.setVelocity(0, 0);
+                enemigo.play('ataque');
+            });
+        }
         if (!player.inmune && this.vidas > 0) { 
             this.vidas--; 
             this.vidasText.setText('Vidas: ' + this.vidas); 
