@@ -30,8 +30,6 @@ class Juego extends Phaser.Scene {
         this.load.spritesheet('ataque','recursos/assets/dinamita.png',{ frameWidth: 64, frameHeight: 64});
         this.load.spritesheet('explosion','recursos/assets/explosion.png',{ frameWidth: 192, frameHeight: 192});
         this.load.spritesheet('dude-ataque','recursos/assets/dude-ataque.png',{ frameWidth: 192, frameHeight: 120});
-        // this.load.spritesheet('dude-ataque','recursos/assets/dude-ataque.png',{ frameWidth: 192, frameHeight: 120});
-
     }
 
     create() {
@@ -433,16 +431,10 @@ class Juego extends Phaser.Scene {
         }
 
         // pasar al siguiente nivel
-<<<<<<< HEAD
-        // if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
-        //     this.scene.start('Boss', { score: this.score, vidas: this.vidas });
-        // }
-=======
         if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
             this.musicaF.destroy();
             this.scene.start('Boss', { score: this.score, vidas: this.vidas });
         }
->>>>>>> 3f2accfe156f4f0240c7ae9ccd92b9a1f6c5c7b6
     }
 
     hitEnemy(ataque, enemy) {
