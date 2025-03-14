@@ -37,11 +37,19 @@ class GameOver extends Phaser.Scene {
             resetButton.fillRect(475, 470, 150, 60);
         });
         resetButton.on('pointerdown', () => {
-            
-            // this.scene.stop('GameOver');
             this.scene.stop('Juego');
             this.scene.stop('Boss');
-            this.scene.start('Juego');
+            this.scene.stop('GameOver');
+            
+            if (window.game) {
+                try {
+                    window.game.destroy(true); 
+                } catch (e) {
+                    console.error("Error:", e);
+                }
+                window.game = null; 
+            }
+            window.location.href = 'menu.html';
         });
     }
 }

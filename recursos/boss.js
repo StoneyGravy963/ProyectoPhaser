@@ -282,7 +282,7 @@ class Boss extends Phaser.Scene {
             const puntuacionAnterior = records[jugadorId].puntuacion;
             if (puntuacionActual > puntuacionAnterior) {
                 records[jugadorId].puntuacion = puntuacionActual;
-                records[jugadorIndex].fecha = new Date().toLocaleDateString();
+                records[jugadorId].fecha = new Date().toLocaleDateString();
                 localStorage.setItem("records", JSON.stringify(records));
             }
         }
@@ -315,7 +315,7 @@ class Boss extends Phaser.Scene {
                 this.physics.pause();
                 player.anims.play('turn');
                 player.setTint(0xff0000);
-                this.scene.stop('Boss');
+                this.scene.pause();
                 this.scene.launch('GameOver');
             }
         }

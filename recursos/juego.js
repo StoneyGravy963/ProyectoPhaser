@@ -427,7 +427,6 @@ class Juego extends Phaser.Scene {
                 this.scene.pause();
                 player.setTint(0xff0000);
                 player.anims.play('turn');
-                
                 this.gameOver = true;
                 this.scene.launch('GameOver');
                 // this.scene.start('GameOver');

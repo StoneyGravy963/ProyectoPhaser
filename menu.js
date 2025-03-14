@@ -68,7 +68,7 @@ function guardarDatos() {
     // Iniciar el juego
     document.querySelector(".contenedor").style.display = "none";
     document.getElementById("contenedor-juego").style.display = "block";
-    new Phaser.Game(config);
+    window.game = new Phaser.Game(config);
     console.log("HOLAAAAAAAAAAAAAAAAA");
 }
 function allowDrop(ev) {
