@@ -45,32 +45,51 @@ function guardarDatos() {
 
     if (jugadorExistenteIndex === -1) {
         // Si el jugador no existe, crear un nuevo registro
-        const jugador = {
-            nombre: nombre,
-            fecha: fecha,
-            puntuacion: puntuacion
-        };
+        const jugador = { nombre, fecha, puntuacion };
         records.push(jugador);
-        // Guardar el índice del nuevo jugador en sessionStorage
         sessionStorage.setItem("jugadorIndex", records.length - 1);
     } else {
-        // Si el jugador ya existe, no crear un nuevo registro, pero guardar su índice
+        // Si el jugador ya existe, solo actualiza el índice en sessionStorage
         sessionStorage.setItem("jugadorIndex", jugadorExistenteIndex);
     }
 
     // Guardar el array actualizado en localStorage
     localStorage.setItem("records", JSON.stringify(records));
 
-    // Guardar el personaje seleccionado (temporal, usando sessionStorage)
+    // Guardar personaje seleccionado
     const personajeSeleccionado = sessionStorage.getItem("personajeSeleccionado") || "P1";
     sessionStorage.setItem("numeroPersonaje", personajeSeleccionado);
 
-    // Iniciar el juego
+    // Ocultar pantalla inicial y mostrar el juego
     document.querySelector(".contenedor").style.display = "none";
     document.getElementById("contenedor-juego").style.display = "block";
     new Phaser.Game(config);
-    console.log("HOLAAAAAAAAAAAAAAAAA");
 }
+
+// Función para cargar los datos en la tabla
+function cargarRecords() {
+    const tablaBody = document.querySelector(".table tbody");
+    tablaBody.innerHTML = ""; 
+
+    let records = JSON.parse(localStorage.getItem("records")) || [];
+
+    records.forEach((jugador, index) => {
+        let fila = `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${jugador.nombre}</td>
+                <td>${jugador.puntuacion}</td>
+                <td>${jugador.fecha}</td>
+            </tr>
+        `;
+        tablaBody.innerHTML += fila;
+    });
+}
+
+
+document.addEventListener("DOMContentLoaded", cargarRecords);
+
+
 function allowDrop(ev) {
     ev.preventDefault();
 }
@@ -124,8 +143,7 @@ function dragEnter(statusId) {
 // }
 
 
-let records = JSON.parse(localStorage.getItem("records")) || [];
-records.sort((a, b) => b.puntuacion - a.puntuacion);
+
 function mostrarRecords() {
     let records = JSON.parse(localStorage.getItem("records")) || [];
     records.sort((a, b) => b.puntuacion - a.puntuacion);
@@ -155,7 +173,6 @@ function myCanvas(canvasId, imageSrc) {
     };
 }
 
-// Llamar a la función cuando la página haya cargado
 window.onload = function () {
     myCanvas("canvas1", "retrato.jpg");
     myCanvas("canvas2", "retrato2.jpg");
