@@ -12,6 +12,7 @@ class Boss extends Phaser.Scene {
         this.load.image('back', './recursos/assets/background2.png'); 
         this.load.image('plataforma', './recursos/assets/platform.png');   
         this.load.image('suelo', './recursos/assets/platform.png');   
+        // this.load.spritesheet('dude2', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 }); 
         this.load.spritesheet('dude', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 });
         this.load.image('attack', './recursos/assets/star.png');     
         this.load.spritesheet('fuego','./recursos/assets/proyectilBoss.png',{ frameWidth: 96, frameHeight: 96 }); 
@@ -137,7 +138,7 @@ class Boss extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         this.physics.add.collider(this.player.sprite, this.platforms);
         // this.physics.add.collider(this.player.sprite, this.dragon);
-        // this.physics.add.overlap(this.player.sprite, this.fuegos, this.hitPlayer, null, this);
+        this.physics.add.overlap(this.player.sprite, this.fuegos, this.hitPlayer, null, this);
         // this.physics.add.overlap(this.player.sprite, this.dragon, this.hitPlayer, null, this);
         this.physics.add.overlap(this.player.ataque, this.dragon, this.hitDragon, null, this);
         
@@ -254,6 +255,21 @@ class Boss extends Phaser.Scene {
             }
         });
     }
+
+    actualizarRecord(puntuacionActual) {
+        let records = JSON.parse(localStorage.getItem("records")) || [];
+        const jugadorId = parseInt(sessionStorage.getItem("jugadorIndex"));
+
+        if (records.length > 0 && jugadorId >= 0 && jugadorId < records.length) {
+            const puntuacionAnterior = records[jugadorId].puntuacion;
+            if (puntuacionActual > puntuacionAnterior) {
+                records[jugadorId].puntuacion = puntuacionActual;
+                records[jugadorId].fecha = new Date().toLocaleString(); 
+                localStorage.setItem("records", JSON.stringify(records));
+            }
+        }
+    }
+
     hitPlayer(player, fuegos) {
         if (!player.inmune && this.vidas > 0) {
             this.vidas--;
@@ -275,6 +291,7 @@ class Boss extends Phaser.Scene {
 
             // Perder
             if (this.vidas <= 0) {
+                this.actualizarRecord(this.score);
                 this.sound.play('perder',{volume:0.5});
                 this.musicaF.destroy();
                 this.physics.pause();
@@ -285,6 +302,7 @@ class Boss extends Phaser.Scene {
             }
         }
     }
+    
 
     hitDragon(attack, dragon) {
         dragon.vida--;
@@ -298,6 +316,10 @@ class Boss extends Phaser.Scene {
         }, [], this);
         
         if (dragon.vida <= 0) {
+            this.score += 100;
+            this.scoreText.setText('Score: ' + this.score);
+            this.actualizarRecord(this.score);
+
             this.musicaF.destroy();
             this.sound.play('ganar',{volume:0.5});
             dragon.play('muerto');
@@ -305,8 +327,6 @@ class Boss extends Phaser.Scene {
             this.time.delayedCall(6000, () => {
                 dragon.body.enable = false;
                 dragon.setVisible(false);
-                this.score += 100;
-                this.scoreText.setText('Score: ' + this.score);
                 this.physics.pause();
                 this.scene.stop('Boss');
                 this.scene.launch('GameOver');

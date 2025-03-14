@@ -17,6 +17,7 @@ class Juego extends Phaser.Scene {
         this.load.image('ataque', './recursos/assets/star.png');
         // this.load.image('recursoEspecial', './recursos/assets/diamond.png');
         this.load.spritesheet('dude', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 }); 
+        // this.load.spritesheet('dude2', './recursos/assets/caballero.png', { frameWidth: 192, frameHeight: 95 }); 
         this.load.audio('recursoespSonido', './recursos/assets/sounds/coin.wav');   
         this.load.audio('backgroundlvl1', './recursos/assets/sounds/Escena1.mp3');
         this.load.audio('moneda', './recursos/assets/sounds/coin.mp3');
@@ -362,6 +363,7 @@ class Juego extends Phaser.Scene {
             this.scene.start('Boss', { score: this.score, vidas: this.vidas });
         }
     }
+    
 
     hitEnemy(ataque, enemy) {
         enemy.disableBody(true, true); 
@@ -388,6 +390,17 @@ class Juego extends Phaser.Scene {
             
             // Perder
             if (this.vidas <= 0) {
+                let records = JSON.parse(localStorage.getItem("records")) || [];
+                const jugadorIndex = parseInt(sessionStorage.getItem("jugadorIndex"));
+        
+                if (records.length > 0 && jugadorIndex >= 0 && jugadorIndex < records.length) {
+                    const puntuacionAnterior = records[jugadorIndex].puntuacion;
+                    if (this.score > puntuacionAnterior) {
+                        records[jugadorIndex].puntuacion = this.score;
+                        records[jugadorIndex].fecha = new Date().toLocaleString(); 
+                    }
+                    localStorage.setItem("records", JSON.stringify(records));
+                }
                 this.sound.play('perder',{volume:0.3});
                 this.musicaF.destroy();
                 this.physics.pause();
