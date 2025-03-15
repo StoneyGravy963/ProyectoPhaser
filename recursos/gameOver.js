@@ -12,21 +12,21 @@ class GameOver extends Phaser.Scene {
     }
 
     create() {
-        // Fondo animado
+        // Fondo
         let video = this.add.video(0, 0, 'gameOverBg').setOrigin(0);
         video.setScale(1.6);
         video.play(true);
 
-        // Barra animada GAME OVER
+        // Barra  GAME OVER
         this.gameOverBar = this.add.tileSprite(550, 200, 1200, 89, 'gameOverBar').setOrigin(0.5);
 
         // Botón de "Menú Principal"
         let menuButton = this.add.image(550, 500, 'menuButton').setOrigin(0.5).setInteractive();
 
-        // Crear el sprite para el efecto de selección y colocarlo junto al botón
-        let efectoSeleccionar = this.add.sprite(130, 500, 'efecto').setOrigin(0.5).setAlpha(0).setScale(3.2); // Efecto oculto inicialmente
 
-        // Crear la animación de "efecto-seleccionar"
+        let efectoSeleccionar = this.add.sprite(130, 500, 'efecto').setOrigin(0.5).setAlpha(0).setScale(3.2); 
+
+ 
         this.anims.create({
             key: 'efecto-seleccionar',
             frames: this.anims.generateFrameNumbers('efecto', { start: 0, end: 4 }),
@@ -34,12 +34,12 @@ class GameOver extends Phaser.Scene {
             repeat: -1          
         });
 
-        // Efecto hover (cambia de imagen, escala y activa el efecto)
+
         menuButton.on('pointerover', () => {
             menuButton.setTexture('menuButtonHover');
             menuButton.setScale(1.1);
 
-            // Iniciar la animación del efecto y hacerlo visible
+  
             efectoSeleccionar.setAlpha(1);
             efectoSeleccionar.anims.play('efecto-seleccionar');
         });
@@ -48,12 +48,11 @@ class GameOver extends Phaser.Scene {
             menuButton.setTexture('menuButton');
             menuButton.setScale(1);
 
-            // Detener la animación y ocultar el efecto
+
             efectoSeleccionar.setAlpha(0);
             efectoSeleccionar.anims.stop();
         });
 
-        // Efecto al hacer clic (ligero escalado y cambio de color)
         menuButton.on('pointerdown', () => {
             this.tweens.add({
                 targets: menuButton,
@@ -78,7 +77,6 @@ class GameOver extends Phaser.Scene {
     }
 
     update() {
-        // Movimiento de la barra animada
         this.gameOverBar.tilePositionX += 0.5;
     }
 }
