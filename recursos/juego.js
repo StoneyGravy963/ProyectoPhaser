@@ -35,6 +35,7 @@ class Juego extends Phaser.Scene {
 
         this.load.spritesheet('dude2', './recursos/assets/goblin.png', { frameWidth: 192, frameHeight: 95}); 
         this.load.spritesheet('dude2-ataque','recursos/assets/goblin-ataque.png',{ frameWidth: 192, frameHeight: 95});
+    
 
     }
 
@@ -143,55 +144,11 @@ class Juego extends Phaser.Scene {
 
         this.platforms.create(3100, 600, 'plataforma');  //10                //AQUI VA CANON
 
-        
-
-
-     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         this.player = new Player(this, 100, 450);
         // this.player.sprite.setScale(1.1);
         this.pausa = new Pausa(this, this.player);
+        // this.pausa.create();
         this.cameras.main.startFollow(this.player.sprite, false, 0.2);
         
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -491,7 +448,10 @@ class Juego extends Phaser.Scene {
     // }
 
     update() {
-        if (this.gameOver || this.pausa.activarPausa()) return;
+        if (this.gameOver) return;
+        this.pausa.activarPausa();
+        if (this.pausa.isPaused) return;
+
         
         if (this.cursors.left.isDown && this.player.sprite.anims.currentAnim.key !== 'dude-atacar') {
             // Si el jugador presiona izquierda y no está en la animación 'dude-atacar'
