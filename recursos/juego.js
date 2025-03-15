@@ -35,6 +35,10 @@ class Juego extends Phaser.Scene {
 
         this.load.spritesheet('dude2', './recursos/assets/goblin.png', { frameWidth: 192, frameHeight: 95}); 
         this.load.spritesheet('dude2-ataque','recursos/assets/goblin-ataque.png',{ frameWidth: 192, frameHeight: 95});
+
+
+        this.load.video('pausaVideo', 'recursos/assets/video-pause.mp4');
+        this.load.image('botonReanudar', 'recursos/assets/btn-reanudar.png');
     
 
     }
@@ -148,7 +152,6 @@ class Juego extends Phaser.Scene {
         this.player = new Player(this, 100, 450);
         // this.player.sprite.setScale(1.1);
         this.pausa = new Pausa(this, this.player);
-        // this.pausa.create();
         this.cameras.main.startFollow(this.player.sprite, false, 0.2);
         
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -449,7 +452,7 @@ class Juego extends Phaser.Scene {
 
     update() {
         if (this.gameOver) return;
-        this.pausa.activarPausa();
+        if(this.pausa.activarPausa())return;
         if (this.pausa.isPaused) return;
 
         
