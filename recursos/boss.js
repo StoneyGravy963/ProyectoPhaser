@@ -27,7 +27,7 @@ class Boss extends Phaser.Scene {
     }
 
     create() {
-        let back=this.add.image(600,300, 'back').setScale(1.5);
+        let back=this.add.image(600,300, 'back').setScale(1.5).setPosition(600,400);
         back.setAlpha(0.6);
 
         this.musicaF = this.sound.add('background', { loop: true});
@@ -37,6 +37,7 @@ class Boss extends Phaser.Scene {
         
 
         this.physics.world.setBounds(0, 0, 1200, 800);
+        // this.cameras.main.setBounds(0, 0, 1500, 800);
 
         //SPRITES
         this.anims.create({
@@ -76,9 +77,16 @@ class Boss extends Phaser.Scene {
         this.platforms = this.physics.add.staticGroup();
         // this.platforms.create(600, 700, 'plataforma').setScale(3).refreshBody(); 
         this.platforms.create(400, 730, 'suelo').refreshBody();
+        this.platforms.create(400+1999, 730, 'suelo').refreshBody();
         this.platforms.create(200, 600, 'plataforma'); 
         this.platforms.create(900, 600, 'plataforma'); 
-        this.platforms.create(550, 450, 'plataforma'); 
+        this.platforms.create(500, 450, 'plataforma'); 
+        this.platforms.create(900, 600, 'plataforma'); 
+
+        this.platforms.create(200, 350, 'plataforma').setDisplaySize(200,35).setSize(200,35).setOffset(100,0); 
+
+        this.platforms.create(1050, 450, 'plataforma').setDisplaySize(200,35).setSize(200,35).setOffset(100,0); 
+ 
         
         this.player = new Player(this, 100, 600);
         this.cameras.main.startFollow(this.player.sprite, false,0.2,0,0,200);
