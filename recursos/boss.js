@@ -100,12 +100,12 @@ class Boss extends Phaser.Scene {
             fontSize: '32px',
             fill: '#fff'
         }).setScrollFactor(0);
-        this.aliasText = this.add.text(800, 50, `Alias: ${jugador.nombre}`, { 
+        this.aliasText = this.add.text(770, 50, `Alias: ${jugador.nombre}`, { 
             fontSize: '32px',
             fill: '#fff'
         }).setScrollFactor(0);
     
-        this.nivelText = this.add.text(800, 16, 'Nivel: 2', { 
+        this.nivelText = this.add.text(770, 16, 'Nivel: 2', { 
             fontSize: '32px',
             fill: '#fff'
         }).setScrollFactor(0);

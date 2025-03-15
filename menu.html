@@ -33,6 +33,41 @@
     </style>
 </head>
 <body>
+    <audio id="musica" loop>
+        <source src="recursos\assets\sounds\audioMenu.mpeg" type="audio/mpeg">
+      </audio>
+      
+      <script>
+        function reproducirMusica() {
+          let audio = document.getElementById("musica");
+      
+          // Intentar reproducir automáticamente
+          let playPromise = audio.play();
+      
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {
+              // Si el navegador bloquea la reproducción, esperar una interacción
+              document.addEventListener("click", () => {
+                audio.play();
+              }, { once: true });
+            });
+          }
+        }
+      
+        function pausarMusica() {
+          let audio = document.getElementById("musica");
+      
+          if (!audio.paused) {
+            audio.pause();
+          } else {
+            audio.play();
+          }
+        }
+      
+        // Llamar la función cuando la página haya cargado
+        document.addEventListener("DOMContentLoaded", reproducirMusica);
+      </script>
+    
     <div class="contenedor">
         <div class="tablero">
             <div class="opciones pantalla-principal">
@@ -62,7 +97,8 @@
                     <label class="Titulo-nombre" for="nombre">Nombre de Jugador</label>
                     <input type="text" id="nombre" />
                 </div>
-                <input class="nombre-boton" type="button" onclick="guardarDatos()" value="EMPEZAR">
+                <input class="nombre-boton" type="button" onclick="guardarDatos(); pausarMusica()"  value="EMPEZAR">
+
                 <div class="opcion-nombre" onclick="moverCamara('derecha')">Volver</div>
             </div>
 

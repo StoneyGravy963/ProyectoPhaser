@@ -32,11 +32,18 @@ class Juego extends Phaser.Scene {
         this.load.spritesheet('explosion','recursos/assets/explosion.png',{ frameWidth: 192, frameHeight: 192});
         this.load.spritesheet('dude-ataque','recursos/assets/dude-ataque.png',{ frameWidth: 192, frameHeight: 120});
 
+        this.load.spritesheet('dude2', './recursos/assets/goblin.png', { frameWidth: 192, frameHeight: 95 }); 
+        this.load.spritesheet('dude2-ataque','recursos/assets/goblin-ataque.png',{ frameWidth: 192, frameHeight: 120});
+
     }
 
     create() {
         let background=this.add.image(600,300, 'background').setScale(0.4);
         background.setAlpha(0.6);
+
+        const personajeSeleccionado = sessionStorage.getItem("personajeSeleccionado") || "P1";
+        const spriteKey = personajeSeleccionado === "P1" ? 'dude' : 'dude2';
+        const attackName = spriteKey === "dude" ? 'dude-ataque' : 'dude2-ataque';
 
         //SPRITES
         this.anims.create({
@@ -78,7 +85,7 @@ class Juego extends Phaser.Scene {
         });
         this.anims.create({
             key: 'dude-atacar',
-            frames: this.anims.generateFrameNumbers('dude-ataque', { start: 0, end: 5 }),
+            frames: this.anims.generateFrameNumbers(attackName, { start: 0, end: 5 }),
             frameRate: 100,
             repeat: 0
         });
