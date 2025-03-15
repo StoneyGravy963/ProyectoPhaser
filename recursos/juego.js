@@ -6,7 +6,7 @@ class Juego extends Phaser.Scene {
     preload() {
         this.load.image('prendido', './recursos/assets/volume.png');
         this.load.image('muteado', './recursos/assets/mute.png');
-        this.load.image('background', './recursos/assets/background1a.png');
+        this.load.image('background', 'recursos/assets/background1b.png');
         this.load.image('plataforma', './recursos/assets/platform.png');
         this.load.image('suelo', './recursos/assets/ground.png');
         this.load.image('vampiro', './recursos/assets/vampiros.png');
@@ -38,7 +38,7 @@ class Juego extends Phaser.Scene {
     }
 
     create() {
-        let background=this.add.image(600,300, 'background').setScale(0.4);
+        let background=this.add.image(600,300, 'background').setScale(0.5).setPosition(1250,400);
         background.setAlpha(0.6);
 
         const personajeSeleccionado = sessionStorage.getItem("personajeSeleccionado") || "P1";
@@ -101,12 +101,14 @@ class Juego extends Phaser.Scene {
         this.controlMusica = new Musica(this, this.musicaF);
 
         // Cambiarrrrrrrrrrrrr
-        this.physics.world.setBounds(0, 0, 1100, 800);
-        this.cameras.main.setBounds(0, 0, 1100, 800);
+        this.physics.world.setBounds(0, 0, 3200, 800);
+        this.cameras.main.setBounds(0, 0, 3200, 800);
         this.platforms = this.physics.add.staticGroup();
         // this.platforms.create(400, 800, 'plataforma').setScale(5).refreshBody();
        this.platforms.create(400, 755, 'suelo').refreshBody();
         this.platforms.create(400, 785, 'suelo');   
+        this.platforms.create(400+1999, 755, 'suelo').refreshBody();
+        this.platforms.create(400+1999, 785, 'suelo');   
         this.platforms.create(600, 500, 'plataforma');
         this.platforms.create(50, 250, 'plataforma');
         this.platforms.create(750, 220, 'plataforma');
@@ -460,7 +462,7 @@ class Juego extends Phaser.Scene {
         }
 
         // pasar al siguiente nivel
-        if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
+        if (this.player.sprite.x >= 3200 - 3150) {//cambiar ancho 
             this.musicaF.destroy();
             this.scene.start('Boss', { score: this.score, vidas: this.vidas });
         }
