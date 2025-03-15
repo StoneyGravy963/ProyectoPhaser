@@ -62,6 +62,19 @@ body {
     justify-items: center;
     align-items: center;
 }
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 100px;
+    width: 170px;
+    height: auto;
+    z-index: 10;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5)); 
+    transition: transform 0.3s ease; 
+}
+.logo:hover {
+    transform: scale(1.1); 
+}
 
 .Titulo-Personajes{
     grid-column: span 5; 

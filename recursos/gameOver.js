@@ -45,7 +45,7 @@ class GameOver extends Phaser.Scene {
                 }
                 window.game = null; 
             }
-            window.location.href = 'menu.html';
+            window.location.href = 'index.html';
         });
     }
 }

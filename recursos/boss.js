@@ -2,6 +2,7 @@ class Boss extends Phaser.Scene {
     constructor() {
         super({ key: 'Boss' });
     }
+    
     init(data) {
         
         this.score = data.score || 0;
