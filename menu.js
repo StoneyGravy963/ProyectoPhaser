@@ -29,15 +29,10 @@ function moverCamara(direccion) {
 }
 
 
-/*Funciones para seleccion de personaje (Drag and drop & localStorage)*/
 function guardarDatos() {
-    // Obtener el nombre del jugador
     const nombre = document.getElementById("nombre").value.trim();
-
-    // Validación: Solo letras, dígitos y barra baja, longitud entre 4 y 8 caracteres
-    const regex = /^[a-zA-Z0-9_]{4,8}$/;
-
-    if (!regex.test(nombre)) {
+    const val = /^[a-zA-Z0-9_]{4,8}$/;
+    if (!val.test(nombre)) {
         alertify.alert(
             'Error al capturar el nombre', 
             'Solo puede contener:<br>' +
@@ -45,7 +40,7 @@ function guardarDatos() {
             '- Letras<br>' +
             '- Números<br>' +
             '- Guiones bajos (_) ',
-            function(){ alertify.error('Corrige el nombre e intenta nuevamente.'); }
+            function(){ alertify.error('Corrige el nombre e intenta nuevamente'); }
         );
         return;
     }
@@ -60,12 +55,12 @@ function guardarDatos() {
     const jugadorExistenteIndex = records.findIndex(jugador => jugador.nombre.toLowerCase() === nombre.toLowerCase());
 
     if (jugadorExistenteIndex === -1) {
-        // Si el jugador no existe, crear un nuevo registro
+        // si no existe crear uno nuevo
         const jugador = { nombre, fecha, puntuacion };
         records.push(jugador);
         sessionStorage.setItem("jugadorIndex", records.length - 1);
     } else {
-        // Si el jugador ya existe, solo actualiza el índice en sessionStorage
+        // Si eciste actualizar
         sessionStorage.setItem("jugadorIndex", jugadorExistenteIndex);
     }
 
@@ -153,7 +148,7 @@ function drop(ev, statusId) {
 
 function dragEnter(statusId) {
     const dropZone = document.getElementById("div4");
-    dropZone.style.boxShadow = "inset 0 0 10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 69, 0, 0.8)"; // Resplandor rojizo (fuego)
+    dropZone.style.boxShadow = "inset 0 0 10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 69, 0, 0.8)"; 
     dropZone.style.background = "linear-gradient(135deg, #6B6B6B, #8B4513)"; 
     dropZone.classList.add("shine");
 }
