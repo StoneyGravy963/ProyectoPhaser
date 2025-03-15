@@ -8,8 +8,6 @@ class Player {
         const spriteKey = personajeSeleccionado === "P1" ? 'dude' : 'dude2';
         const attackName = spriteKey === "dude" ? 'dude-ataque' : 'dude2-ataque';
         this.nomAtaque=attackName;
-
-
         this.sprite = scene.physics.add.sprite(x, y, spriteKey);
         
         this.sprite.setSize(60, 65);
