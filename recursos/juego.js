@@ -32,6 +32,9 @@ class Juego extends Phaser.Scene {
         this.load.spritesheet('explosion','recursos/assets/explosion.png',{ frameWidth: 192, frameHeight: 192});
         this.load.spritesheet('dude-ataque','recursos/assets/dude-ataque.png',{ frameWidth: 192, frameHeight: 120});
 
+        this.load.spritesheet('dude2', './recursos/assets/goblin.png', { frameWidth: 192, frameHeight: 95 }); 
+        this.load.spritesheet('dude2-ataque','recursos/assets/goblin-ataque.png',{ frameWidth: 192, frameHeight: 120});
+
     }
 
     create() {
@@ -78,7 +81,7 @@ class Juego extends Phaser.Scene {
         });
         this.anims.create({
             key: 'dude-atacar',
-            frames: this.anims.generateFrameNumbers('dude-ataque', { start: 0, end: 5 }),
+            frames: this.anims.generateFrameNumbers('dude2-ataque', { start: 0, end: 5 }),
             frameRate: 100,
             repeat: 0
         });
