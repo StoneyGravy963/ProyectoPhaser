@@ -77,7 +77,11 @@ class Boss extends Phaser.Scene {
         this.platforms = this.physics.add.staticGroup();
         // this.platforms.create(600, 700, 'plataforma').setScale(3).refreshBody(); 
         this.platforms.create(400, 730, 'suelo').refreshBody();
-        this.platforms.create(400+1999, 730, 'suelo').refreshBody();
+        this.platforms.create(400, 730, 'suelo').refreshBody();
+        this.platforms.create(400+1999, 780, 'suelo').refreshBody();
+        this.platforms.create(400+1999, 780, 'suelo').refreshBody();
+
+
         this.platforms.create(200, 600, 'plataforma'); 
         this.platforms.create(900, 600, 'plataforma'); 
         this.platforms.create(500, 450, 'plataforma'); 
