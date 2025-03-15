@@ -235,9 +235,9 @@ class Boss extends Phaser.Scene {
 
         this.cursors = this.input.keyboard.createCursorKeys();
         this.physics.add.collider(this.player.sprite, this.platforms);
-        // this.physics.add.collider(this.player.sprite, this.dragon);
-        // this.physics.add.overlap(this.player.sprite, this.fuegos, this.hitPlayer, null, this);
-        // this.physics.add.overlap(this.player.sprite, this.dragon, this.hitPlayer, null, this);
+        this.physics.add.collider(this.player.sprite, this.dragon);
+        this.physics.add.overlap(this.player.sprite, this.fuegos, this.hitPlayer, null, this);
+        this.physics.add.overlap(this.player.sprite, this.dragon, this.hitPlayer, null, this);
         this.physics.add.overlap(this.player.ataque, this.dragon, this.hitDragon, null, this);
         
     }
