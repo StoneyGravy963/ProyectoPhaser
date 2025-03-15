@@ -127,8 +127,8 @@ class Juego extends Phaser.Scene {
 
         // Vampiro
         this.vampiros = this.physics.add.group();
-        this.crearVampiro(600, 100); 
-        this.crearVampiro(50, 200);  
+        this.crearVampiro(600, 300); 
+        this.crearVampiro(20, 600);  
 
         // Berserker 
         this.berserkers = this.physics.add.group(); 
@@ -169,12 +169,12 @@ class Juego extends Phaser.Scene {
             fontSize: '32px',
             fill: '#fff'
         }).setScrollFactor(0);
-        this.aliasText = this.add.text(800, 50, `Alias: ${jugador.nombre}`, { 
+        this.aliasText = this.add.text(770, 50, `Alias: ${jugador.nombre}`, { 
             fontSize: '32px',
             fill: '#fff'
         }).setScrollFactor(0);
     
-        this.nivelText = this.add.text(800, 16, 'Nivel: 1', { 
+        this.nivelText = this.add.text(770, 16, 'Nivel: 1', { 
             fontSize: '32px',
             fill: '#fff'
         }).setScrollFactor(0);
@@ -455,6 +455,7 @@ class Juego extends Phaser.Scene {
         // pasar al siguiente nivel
         if (this.player.sprite.x >= 1100 - 900) {//cambiar ancho 
             this.musicaF.destroy();
+            
             this.scene.start('Boss', { score: this.score, vidas: this.vidas });
         }
     }

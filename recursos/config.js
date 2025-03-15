@@ -9,6 +9,6 @@ const config = {
             debug: true
         }
     },
-    scene: [Juego, GameOver, Boss],
+    scene: [Juego, GameOver, Boss,Victoria],
     parent: 'contenedor-juego' 
 };

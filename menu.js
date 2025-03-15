@@ -154,13 +154,14 @@ function drop(ev, statusId) {
 
 function dragEnter(statusId) {
     const dropZone = document.getElementById("div4");
-    dropZone.style.backgroundColor = "lightgreen"; 
+    dropZone.style.boxShadow = "inset 0 0 10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 69, 0, 0.8)"; // Resplandor rojizo (fuego)
+    dropZone.style.background = "linear-gradient(135deg, #6B6B6B, #8B4513)"; 
+    dropZone.classList.add("shine");
 }
 
-// function dragLeave(statusId) {
-//     const dropZone = document.getElementById("div4");
-//     // dropZone.style.backgroundColor = "lightgray"; 
-// }
+function dragLeave(statusId) {
+
+}
 
 
 
@@ -177,8 +178,8 @@ function myCanvas(canvasId, imageSrc) {
 }
 
 window.onload = function () {
-    myCanvas("canvas1", "retrato.jpg");
-    myCanvas("canvas2", "retrato2.jpg");
-    myCanvas("canvas3", "retrato3.png");
+    myCanvas("canvas1", "recursos/assets/retrato.png");
+    myCanvas("canvas2", "recursos/assets/retrato1.png");
+    myCanvas("canvas3", "recursos/assets/retrato2.png");
 };
 

@@ -34,8 +34,7 @@ class Boss extends Phaser.Scene {
         // sonido
         this.controlMusica = new Musica(this, this.musicaF);
         
-        let background=this.add.image(600,300, 'sky').setScale(1);
-        background.setAlpha(0.6);
+
         this.physics.world.setBounds(0, 0, 1200, 800);
 
         //SPRITES
@@ -106,7 +105,7 @@ class Boss extends Phaser.Scene {
             fill: '#fff'
         }).setScrollFactor(0);
     
-        this.nivelText = this.add.text(800, 16, 'Nivel: 1', { 
+        this.nivelText = this.add.text(800, 16, 'Nivel: 2', { 
             fontSize: '32px',
             fill: '#fff'
         }).setScrollFactor(0);
@@ -328,7 +327,8 @@ class Boss extends Phaser.Scene {
                 this.physics.pause();
                 player.anims.play('turn');
                 player.setTint(0xff0000);
-                this.scene.pause();
+                this.scene.stop('Boss');
+                // this.scene.pause();
                 this.scene.launch('GameOver');
             }
         }
@@ -360,7 +360,7 @@ class Boss extends Phaser.Scene {
                 dragon.setVisible(false);
                 this.physics.pause();
                 this.scene.stop('Boss');
-                this.scene.launch('GameOver');
+                this.scene.launch('Victoria');
             }, [], this);
         }
     }

@@ -10,15 +10,15 @@ class GameOver extends Phaser.Scene {
             color: '#ff0000',
             align: 'center'
         }).setOrigin(0.5);
-        this.anims.remove('left');
-        this.anims.remove('turn');
-        this.anims.remove('right');
+        // this.anims.remove('left');
+        // this.anims.remove('turn');
+        // this.anims.remove('right');
         this.scene.get('Juego').gameOver = false;
         let resetButton = this.add.graphics();
         resetButton.fillStyle(0x666666, 1);
-        resetButton.fillRect(475, 470, 150, 60);
+        resetButton.fillRect(450, 470, 200, 60);
         resetButton.setScrollFactor(0);
-        resetButton.setInteractive(new Phaser.Geom.Rectangle(475, 470, 200, 60), Phaser.Geom.Rectangle.Contains);
+        resetButton.setInteractive(new Phaser.Geom.Rectangle(475, 470, 230, 60), Phaser.Geom.Rectangle.Contains);
 
         let resetText = this.add.text(550, 500, 'Menu Principal', {
             fontFamily: 'Arial',
@@ -29,18 +29,14 @@ class GameOver extends Phaser.Scene {
         resetButton.on('pointerover', () => {
             resetButton.clear();
             resetButton.fillStyle(0x999999, 1);
-            resetButton.fillRect(475, 470, 150, 60);
+            resetButton.fillRect(450, 470, 200, 60);
         });
         resetButton.on('pointerout', () => {
             resetButton.clear();
             resetButton.fillStyle(0x666666, 1);
-            resetButton.fillRect(475, 470, 150, 60);
+            resetButton.fillRect(450, 470, 200, 60);
         });
-        resetButton.on('pointerdown', () => {
-            this.scene.stop('Juego');
-            this.scene.stop('Boss');
-            this.scene.stop('GameOver');
-            
+        resetButton.on('pointerdown', () => {            
             if (window.game) {
                 try {
                     window.game.destroy(true); 
