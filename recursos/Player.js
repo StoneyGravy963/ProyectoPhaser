@@ -7,6 +7,7 @@ class Player {
         const personajeSeleccionado = sessionStorage.getItem("personajeSeleccionado") || "P1";
         const spriteKey = personajeSeleccionado === "P1" ? 'dude' : 'dude2';
         const attackName = spriteKey === "dude" ? 'dude-ataque' : 'dude2-ataque';
+        this.nomAtaque=attackName;
 
 
         this.sprite = scene.physics.add.sprite(x, y, spriteKey);
@@ -52,7 +53,7 @@ class Player {
         this.scene.anims.create({
             key: 'dude-atacar',
             frames: this.scene.anims.generateFrameNumbers(attackName, { start: 0, end: 5 }),
-            frameRate: 10,
+            frameRate: 100,
             repeat: 0
         });
     }

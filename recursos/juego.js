@@ -41,6 +41,10 @@ class Juego extends Phaser.Scene {
         let background=this.add.image(600,300, 'background').setScale(0.4);
         background.setAlpha(0.6);
 
+        const personajeSeleccionado = sessionStorage.getItem("personajeSeleccionado") || "P1";
+        const spriteKey = personajeSeleccionado === "P1" ? 'dude' : 'dude2';
+        const attackName = spriteKey === "dude" ? 'dude-ataque' : 'dude2-ataque';
+
         //SPRITES
         this.anims.create({
             key: 'run-berserker',         // Nombre de la animación
@@ -81,7 +85,7 @@ class Juego extends Phaser.Scene {
         });
         this.anims.create({
             key: 'dude-atacar',
-            frames: this.anims.generateFrameNumbers('dude2-ataque', { start: 0, end: 5 }),
+            frames: this.anims.generateFrameNumbers(attackName, { start: 0, end: 5 }),
             frameRate: 100,
             repeat: 0
         });

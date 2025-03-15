@@ -34,8 +34,6 @@ class Boss extends Phaser.Scene {
         // sonido
         this.controlMusica = new Musica(this, this.musicaF);
         
-        let background=this.add.image(600,300, 'sky').setScale(1);
-        background.setAlpha(0.6);
         this.physics.world.setBounds(0, 0, 1200, 800);
 
         //SPRITES
