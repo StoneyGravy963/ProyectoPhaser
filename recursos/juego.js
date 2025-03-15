@@ -36,6 +36,11 @@ class Juego extends Phaser.Scene {
         this.load.spritesheet('dude2', './recursos/assets/goblin.png', { frameWidth: 192, frameHeight: 95}); 
         this.load.spritesheet('dude2-ataque','recursos/assets/goblin-ataque.png',{ frameWidth: 192, frameHeight: 95});
 
+
+        this.load.video('pausaVideo', 'recursos/assets/video-pause.mp4');
+        this.load.image('botonReanudar', 'recursos/assets/btn-reanudar.png');
+    
+
     }
 
     create() {
@@ -142,51 +147,6 @@ class Juego extends Phaser.Scene {
         this.platforms.create(2620, 370, 'pared').setSize(35,470).setDisplaySize(35,470); //9    
 
         this.platforms.create(3100, 600, 'plataforma');  //10                //AQUI VA CANON
-
-        
-
-
-     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         this.player = new Player(this, 100, 450);
@@ -491,7 +451,10 @@ class Juego extends Phaser.Scene {
     // }
 
     update() {
-        if (this.gameOver || this.pausa.activarPausa()) return;
+        if (this.gameOver) return;
+        if(this.pausa.activarPausa())return;
+        if (this.pausa.isPaused) return;
+
         
         if (this.cursors.left.isDown && this.player.sprite.anims.currentAnim.key !== 'dude-atacar') {
             // Si el jugador presiona izquierda y no está en la animación 'dude-atacar'
@@ -665,6 +628,7 @@ class Juego extends Phaser.Scene {
                 player.setTint(0xff0000);
                 player.anims.play('turn');
                 this.gameOver = true;
+                this.scene.stop('Juego');
                 this.scene.launch('GameOver');
                 // this.scene.start('GameOver');
             }
