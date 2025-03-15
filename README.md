@@ -6,7 +6,7 @@ Este es un juego creado con Phaser y Node.js. Aqui te explico paso a paso cómo 
   Es un programa que te permite ejecutar el servidor del juego. Puedes descargarlo e instalarlo desde este enlace:
     (https://nodejs.org/es).  Durante la instalación selecciona la opción "Instalar npm".
 
-Para verificar que se instaló correctamente, abre la terminal (puedes escribir cmd en el buscador o clickear ) y escribe:
+Para verificar que se instaló correctamente, abre la terminal (puedes escribir cmd en el buscador) y escribe:
   
     node -v
 Si ves un número (por ejemplo, v18.x.x), significa que está instalado. Si no, repite la instalación.
