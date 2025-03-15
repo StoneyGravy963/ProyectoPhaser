@@ -23,7 +23,7 @@ class Victoria extends Phaser.Scene {
         let textoV = this.add.text(550, 250, `¡Felicidades! \n ${jugador}`, {
             fontFamily: 'Arial Black',
             fontSize: '64px',
-            color: '#FFD700', 
+            color: '#8B0000', 
             stroke: '#FFFFFF', 
             strokeThickness: 6, 
             shadow: {
@@ -50,7 +50,7 @@ class Victoria extends Phaser.Scene {
             fontFamily: 'Arial',
             fontSize: '32px',
             color: '#FFFFFF',
-            stroke: '#FFD700',
+            stroke: '#8B0000',
             strokeThickness: 3,
             shadow: {
                 offsetX: 1,

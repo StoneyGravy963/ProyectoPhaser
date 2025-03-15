@@ -71,8 +71,8 @@ class Player {
             this.sprite.play('dude-atacar');
             this.sprite.once('animationcomplete', () => {
                 setTimeout(() => {
-                    this.sprite.play('dude');
-                }, 3000); // Retraso de 100ms
+                    // this.sprite.play('turn');
+                }, 0); // Retraso de 100ms
             });
 
             console.log("aaaaaa");

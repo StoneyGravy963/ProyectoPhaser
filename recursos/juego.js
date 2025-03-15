@@ -8,6 +8,7 @@ class Juego extends Phaser.Scene {
         this.load.image('muteado', './recursos/assets/mute.png');
         this.load.image('background', 'recursos/assets/background1b.png');
         this.load.image('plataforma', './recursos/assets/platform.png');
+        this.load.image('pared', './recursos/assets/pared.png');
         this.load.image('suelo', './recursos/assets/ground.png');
         this.load.image('vampiro', './recursos/assets/vampiros.png');
         // this.load.image('berserker', './recursos/assets/bomb.png');
@@ -30,10 +31,10 @@ class Juego extends Phaser.Scene {
         this.load.spritesheet('canon-ataque','recursos/assets/canon-disparar.png',{ frameWidth: 192, frameHeight: 110 });
         this.load.spritesheet('ataque','recursos/assets/dinamita.png',{ frameWidth: 64, frameHeight: 64});
         this.load.spritesheet('explosion','recursos/assets/explosion.png',{ frameWidth: 192, frameHeight: 192});
-        this.load.spritesheet('dude-ataque','recursos/assets/dude-ataque.png',{ frameWidth: 192, frameHeight: 120});
+        this.load.spritesheet('dude-ataque','recursos/assets/dude-ataque.png',{ frameWidth: 192, frameHeight: 95});
 
-        this.load.spritesheet('dude2', './recursos/assets/goblin.png', { frameWidth: 192, frameHeight: 95 }); 
-        this.load.spritesheet('dude2-ataque','recursos/assets/goblin-ataque.png',{ frameWidth: 192, frameHeight: 120});
+        this.load.spritesheet('dude2', './recursos/assets/goblin.png', { frameWidth: 192, frameHeight: 95}); 
+        this.load.spritesheet('dude2-ataque','recursos/assets/goblin-ataque.png',{ frameWidth: 192, frameHeight: 95});
 
     }
 
@@ -44,6 +45,8 @@ class Juego extends Phaser.Scene {
         const personajeSeleccionado = sessionStorage.getItem("personajeSeleccionado") || "P1";
         const spriteKey = personajeSeleccionado === "P1" ? 'dude' : 'dude2';
         const attackName = spriteKey === "dude" ? 'dude-ataque' : 'dude2-ataque';
+
+        
 
         //SPRITES
         this.anims.create({
@@ -105,14 +108,88 @@ class Juego extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, 3200, 800);
         this.platforms = this.physics.add.staticGroup();
         // this.platforms.create(400, 800, 'plataforma').setScale(5).refreshBody();
-       this.platforms.create(400, 755, 'suelo').refreshBody();
-        this.platforms.create(400, 785, 'suelo');   
-        this.platforms.create(400+1999, 755, 'suelo').refreshBody();
-        this.platforms.create(400+1999, 785, 'suelo');   
-        this.platforms.create(600, 500, 'plataforma');
-        this.platforms.create(50, 250, 'plataforma');
-        this.platforms.create(750, 220, 'plataforma');
-        this.platforms.create(450, 620, 'plataforma');
+    //    this.platforms.create(400, 755, 'suelo').refreshBody(); 
+    //     this.platforms.create(400, 785, 'suelo');   
+    //     this.platforms.create(1220, 755, 'suelo').refreshBody();
+    //     this.platforms.create(1220, 785, 'suelo');   
+
+        this.platforms.create(600, 500, 'plataforma');  //1         //AQUI VA BERSERKER
+        this.platforms.create(0, 755, 'plataforma');  //1         //AQUI VA BERSERKER
+        this.platforms.create(50, 250, 'plataforma');   //2
+        this.platforms.create(750, 250, 'plataforma');  //3
+        this.platforms.create(450, 620, 'plataforma');  //4          //AQUI VA CANON
+        
+
+        //PLATAFORMAS
+        
+        this.platforms.create(1300, 500, 'plataforma');  //5
+        this.platforms.create(1300+400, 500, 'plataforma');  //5
+        this.platforms.create(1300+700, 500, 'plataforma');  //5
+        this.platforms.create(2200, 520, 'pared').setSize(35,470).setDisplaySize(35,470);  //5
+
+        this.platforms.create(1500, 350, 'plataforma');  //6        //AQUI VA BERSERKER
+        this.platforms.create(1800, 200, 'plataforma');  //7
+
+        this.platforms.create(1550, 650, 'plataforma');  //8        //AQUI VA CANON Y ABAJO BERSERKER
+        // this.crearCanon(370, 170);
+        
+        this.platforms.create(1700, 650, 'plataforma');  //8
+
+        this.platforms.create(3600, 755, 'suelo').refreshBody();
+        this.platforms.create(3600, 785, 'suelo'); 
+
+
+        this.platforms.create(2770, 450, 'plataforma');  //9
+        this.platforms.create(2620, 670, 'pared').setSize(35,470).setDisplaySize(35,470); //9
+
+        this.platforms.create(3100, 600, 'plataforma');  //10                //AQUI VA CANON
+
+        
+        // this.crearCanon(370, 170);
+
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         this.player = new Player(this, 100, 450);
         // this.player.sprite.setScale(1.1);
         this.pausa = new Pausa(this, this.player);
@@ -136,18 +213,17 @@ class Juego extends Phaser.Scene {
 
         // Vampiro
         this.vampiros = this.physics.add.group();
-        this.crearVampiro(600, 300); 
-        this.crearVampiro(20, 600);  
+        // this.crearVampiro(600, 300); 
+        // this.crearVampiro(20, 600);  
 
         // Berserker 
         this.berserkers = this.physics.add.group(); 
-        this.crearBerserker(750, 170); 
-        this.crearBerserker(600, 350);
+        // this.crearBerserker(750, 170); 
+        // this.crearBerserker(600, 350);
 
         // Grupo de cañones
         this.canones = this.physics.add.group(); 
         this.crearCanon(370, 170);
-        // this.crearCanon(570, 670);
         // proyectiles
         this.proyectiles = this.physics.add.group({
             defaultKey: 'proyectil',
@@ -160,7 +236,7 @@ class Juego extends Phaser.Scene {
 
         // temp recursos esp
         this.tiempoEspecial = 10000; 
-        this.tiempoEspecialText = this.add.text(400, 16, 'Rec-Especial: 10s', {
+        this.tiempoEspecialText = this.add.text(400, 16, 'Rec-Especial:' + this.tiempoEspecial, {
             fontSize: '32px',
             fill: '#fff'
         }).setScrollFactor(0);
@@ -171,6 +247,7 @@ class Juego extends Phaser.Scene {
             fontSize: '32px', 
             fill: '#fff' 
         }).setScrollFactor(0); 
+        
 
         // vidas
         this.vidas = 3; 
@@ -255,6 +332,7 @@ class Juego extends Phaser.Scene {
         this.score += 50; 
         this.scoreText.setText('Score: ' + this.score);
         this.sound.play('recursoespSonido',{volume:0.2});
+        recurso.destroy();
     }
 
     // crearCanon(x, y) {
@@ -462,7 +540,7 @@ class Juego extends Phaser.Scene {
         }
 
         // pasar al siguiente nivel
-        if (this.player.sprite.x >= 3200 - 3100) {//cambiar ancho 
+        if (this.player.sprite.x >= 3200 - 100) {//cambiar ancho 
             this.musicaF.destroy();
             
             this.scene.start('Boss', { score: this.score, vidas: this.vidas });
@@ -478,7 +556,7 @@ class Juego extends Phaser.Scene {
     }
 
     hitPlayer(player, enemigo) {
-        if (enemigo.texture.key === 'ataque') {
+        if (enemigo && enemigo.texture && enemigo.texture.key === 'ataque') {
             enemigo.play('explosion-anim'); // enemigo ya es el proyectil
             enemigo.once('animationcomplete', () => {
                 enemigo.setVelocity(0, 0);

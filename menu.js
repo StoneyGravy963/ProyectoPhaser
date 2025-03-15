@@ -2,7 +2,6 @@ let posX = -1100;
 let posY = -700;
 const pasoX = 1100;
 const pasoY = 700;
-
 window.onload = () => {
     const tablero = document.querySelector(".tablero");
     requestAnimationFrame(() => {

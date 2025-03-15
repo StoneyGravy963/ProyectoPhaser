@@ -77,7 +77,11 @@ class Boss extends Phaser.Scene {
         this.platforms = this.physics.add.staticGroup();
         // this.platforms.create(600, 700, 'plataforma').setScale(3).refreshBody(); 
         this.platforms.create(400, 730, 'suelo').refreshBody();
-        this.platforms.create(400+1999, 730, 'suelo').refreshBody();
+        this.platforms.create(400, 730, 'suelo').refreshBody();
+        this.platforms.create(400+1999, 780, 'suelo').refreshBody();
+        this.platforms.create(400+1999, 780, 'suelo').refreshBody();
+
+
         this.platforms.create(200, 600, 'plataforma'); 
         this.platforms.create(900, 600, 'plataforma'); 
         this.platforms.create(500, 450, 'plataforma'); 
@@ -136,9 +140,9 @@ class Boss extends Phaser.Scene {
         this.dragon.body.setAllowGravity(false);
         // this.dragon.angle = 0;
         this.dragon.posiciones = [ 
-            { x: 100, y: 100 },  
-            { x: 900, y: 300 }, 
-            { x: 50, y: 100 }, 
+            { x: 300, y: 100 },  
+            { x: 700, y: 200 }, 
+            { x: 250, y: 300 }, 
             { x: 400, y: 200 },  
             { x: 150, y: 450 }   
         ];
@@ -224,7 +228,7 @@ class Boss extends Phaser.Scene {
     lanzarfuego() {
         if (!this.dragon.ultimaPos && this.dragon.vida > 0) {
 
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < 5; i++) {
                 let fuego = this.fuegos.get(this.dragon.x, this.dragon.y);
                 if (fuego) {
                     fuego.setSize(30,30);
