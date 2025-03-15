@@ -116,28 +116,35 @@ class Juego extends Phaser.Scene {
         this.platforms.create(50, 250, 'plataforma');   //2
         this.platforms.create(750, 250, 'plataforma');  //3
         this.platforms.create(450, 620, 'plataforma');  //4          //AQUI VA CANON
-        this.crearCanon(370, 170);
+        
 
         //PLATAFORMAS
         
         this.platforms.create(1300, 500, 'plataforma');  //5
         this.platforms.create(1300+400, 500, 'plataforma');  //5
         this.platforms.create(1300+700, 500, 'plataforma');  //5
-        this.platforms.create(2200, 520, 'pared').setSize(35,470).setDisplaySize(35,470);  //5
+        this.platforms.create(2200, 450, 'pared').setSize(35,470).setDisplaySize(35,470);  //5
 
         this.platforms.create(1500, 350, 'plataforma');  //6        //AQUI VA BERSERKER
-        this.platforms.create(1800, 200, 'plataforma');  //7
+        this.platforms.create(1800, 200, 'plataforma');  //7        //AQUI VA BERSERKER
 
         this.platforms.create(1550, 650, 'plataforma');  //8        //AQUI VA CANON Y ABAJO BERSERKER
-        this.crearCanon(370, 170);
+
         
         this.platforms.create(1700, 650, 'plataforma');  //8
 
-        this.platforms.create(3600, 755, 'suelo').refreshBody();
-        this.platforms.create(3600, 785, 'suelo'); 
+        this.platforms.create(1220+1999, 755, 'suelo').refreshBody();
+        this.platforms.create(1220+1999, 785, 'suelo'); 
 
-        this.platforms.create(3100, 600, 'plataforma');  //9                //AQUI VA CANON
-        this.crearCanon(370, 170);
+
+        this.platforms.create(2770, 450, 'plataforma');  //9        //AQUI VA BERSERKER
+        this.platforms.create(2620, 670, 'pared').setSize(35,470).setDisplaySize(35,470); //9   
+        this.platforms.create(2620, 370, 'pared').setSize(35,470).setDisplaySize(35,470); //9    
+
+        this.platforms.create(3100, 600, 'plataforma');  //10                //AQUI VA CANON
+
+        
+
 
      
 
@@ -203,19 +210,37 @@ class Juego extends Phaser.Scene {
         this.crearRecurso(650, 450); 
         this.crearRecurso(100, 200);
 
+        this.crearRecurso(400, 550);
+        this.crearRecursoEspecial(500, 700);
+        this.crearRecurso(800, 200);
+        this.crearRecurso(950, 350);
+        this.crearRecursoEspecial(2500, 300);
+        this.crearRecurso(1500, 600);
+        this.crearRecursoEspecial(2900, 350);
+        this.crearRecurso(2100, 300);
+
+
         // Vampiro
         this.vampiros = this.physics.add.group();
-        // this.crearVampiro(600, 300); 
-        // this.crearVampiro(20, 600);  
+        this.crearVampiro(600, 300); 
+        this.crearVampiro(2000, 300);  
 
         // Berserker 
         this.berserkers = this.physics.add.group(); 
-        // this.crearBerserker(750, 170); 
-        // this.crearBerserker(600, 350);
+        this.crearBerserker(750, 170); 
+        this.crearBerserker(600, 350);
+        this.crearBerserker(1550, 200);
+        this.crearBerserker(1900, 100);
+        this.crearBerserker(1550, 650);
+        this.crearBerserker(2850, 200);
 
         // Grupo de cañones
         this.canones = this.physics.add.group(); 
-        this.crearCanon(370, 170);
+        this.crearCanon(1700, 500);
+        this.crearCanon(3100, 450);
+        this.crearCanon(1900, 100);
+
+
         // proyectiles
         this.proyectiles = this.physics.add.group({
             defaultKey: 'proyectil',
@@ -227,8 +252,8 @@ class Juego extends Phaser.Scene {
         const jugador = (records.length > 0 && jugadorIndex >= 0 && jugadorIndex < records.length) ? records[jugadorIndex] : { nombre: "Jugador", fecha: new Date().toLocaleString() };
 
         // temp recursos esp
-        this.tiempoEspecial = 10000; 
-        this.tiempoEspecialText = this.add.text(400, 16, 'Rec-Especial: 10s', {
+        this.tiempoEspecial = 25000; 
+        this.tiempoEspecialText = this.add.text(400, 16, 'Rec-Especial: '+this.tiempoEspecial, {
             fontSize: '32px',
             fill: '#fff'
         }).setScrollFactor(0);
