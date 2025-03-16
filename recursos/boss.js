@@ -77,7 +77,11 @@ class Boss extends Phaser.Scene {
         this.platforms = this.physics.add.staticGroup();
         // this.platforms.create(600, 700, 'plataforma').setScale(3).refreshBody(); 
         this.platforms.create(400, 730, 'suelo').refreshBody();
-        this.platforms.create(400+1999, 730, 'suelo').refreshBody();
+        this.platforms.create(400, 730, 'suelo').refreshBody();
+        this.platforms.create(400+1999, 780, 'suelo').refreshBody();
+        this.platforms.create(400+1999, 780, 'suelo').refreshBody();
+
+
         this.platforms.create(200, 600, 'plataforma'); 
         this.platforms.create(900, 600, 'plataforma'); 
         this.platforms.create(500, 450, 'plataforma'); 
@@ -100,29 +104,79 @@ class Boss extends Phaser.Scene {
         const jugadorIndex = parseInt(sessionStorage.getItem("jugadorIndex"));
         const jugador = (records.length > 0 && jugadorIndex >= 0 && jugadorIndex < records.length) ? records[jugadorIndex] : { nombre: "Jugador", fecha: new Date().toLocaleString() };
 
+         // Puntaje
         this.scoreText = this.add.text(16, 16, 'Score: ' + this.score, { 
-            fontSize: '32px', 
-            fill: '#fff' 
-        }).setScrollFactor(0); 
+             fontFamily: '"Press Start 2P", sans-serif',
+             fontSize: '28px',
+             fill: '#FFD700',
+             stroke: '#8B0000',
+             strokeThickness: 4,
+             shadow: {
+                 offsetX: 2,
+                 offsetY: 2,
+                 color: '#FFD700',
+                 blur: 5,
+                 stroke: true,
+                 fill: true
+             }
+         }).setScrollFactor(0);
+         
+ 
+         // vidas
+         this.vidasText = this.add.text(16, 50,'Vidas: ' + this.vidas, { 
+             fontFamily: '"Press Start 2P", sans-serif',
+             fontSize: '28px',
+             fill: '#FFD700',
+             stroke: '#8B0000',
+             strokeThickness: 4,
+             shadow: {
+                 offsetX: 2,
+                 offsetY: 2,
+                 color: '#FFD700',
+                 blur: 5,
+                 stroke: true,
+                 fill: true
+             }
+         }).setScrollFactor(0);
+         this.aliasText = this.add.text(16, 80, `Alias: ${jugador.nombre}`, { 
+             fontFamily: '"Press Start 2P", sans-serif',
+             fontSize: '28px',
+             fill: '#FFD700',
+             stroke: '#8B0000',
+             strokeThickness: 4,
+             shadow: {
+                 offsetX: 2,
+                 offsetY: 2,
+                 color: '#FFD700',
+                 blur: 5,
+                 stroke: true,
+                 fill: true
+             }
+         }).setScrollFactor(0);
+     
+         this.nivelText = this.add.text(770, 16, 'Nivel: 2', { 
+             fontFamily: '"Press Start 2P", sans-serif',
+             fontSize: '28px',
+             fill: '#FFD700',
+             stroke: '#8B0000',
+             strokeThickness: 4,
+             shadow: {
+                 offsetX: 2,
+                 offsetY: 2,
+                 color: '#FFD700',
+                 blur: 5,
+                 stroke: true,
+                 fill: true
+             }
+         }).setScrollFactor(0);
+     
+         this.fechaText = this.add.text(770, 665, `Fecha: ${jugador.fecha}`, { 
+             fontSize: '32px',
+             fill: '#fff'
+         }).setScrollFactor(0);
 
-        this.vidasText = this.add.text(16, 50, 'Vidas: ' + this.vidas, { 
-            fontSize: '32px',
-            fill: '#fff'
-        }).setScrollFactor(0);
-        this.aliasText = this.add.text(770, 50, `Alias: ${jugador.nombre}`, { 
-            fontSize: '32px',
-            fill: '#fff'
-        }).setScrollFactor(0);
-    
-        this.nivelText = this.add.text(770, 16, 'Nivel: 2', { 
-            fontSize: '32px',
-            fill: '#fff'
-        }).setScrollFactor(0);
-    
-        this.fechaText = this.add.text(770, 665, `Fecha: ${jugador.fecha}`, { 
-            fontSize: '32px',
-            fill: '#fff'
-        }).setScrollFactor(0);
+
+        
 
         // dragon
         this.dragon = this.physics.add.sprite(700, 230, 'dragon-volar'); 
@@ -131,20 +185,35 @@ class Boss extends Phaser.Scene {
         this.dragon.setSize(45,40);
         this.dragon.setOffset(19,20);
         this.dragon.setCollideWorldBounds(true);
-        this.dragon.vida = 1; 
+        this.dragon.vida = 2; 
         // this.dragon.setScale(3); 
         this.dragon.body.setAllowGravity(false);
         // this.dragon.angle = 0;
         this.dragon.posiciones = [ 
-            { x: 100, y: 100 },  
-            { x: 900, y: 300 }, 
-            { x: 50, y: 100 }, 
+            { x: 300, y: 100 },  
+            { x: 700, y: 200 }, 
+            { x: 250, y: 300 }, 
             { x: 400, y: 200 },  
             { x: 150, y: 450 }   
         ];
         this.dragon.posActual = -1; 
         this.dragon.ultimaPos = false;
         this.moverSigPosicion();
+        this.dragonVidasText = this.add.text(370, 16, 'Vidas Boss: ' + this.dragon.vida, { 
+            fontFamily: '"Press Start 2P", sans-serif',
+             fontSize: '28px',
+             fill: '#FFD700',
+             stroke: '#8B0000',
+             strokeThickness: 4,
+             shadow: {
+                 offsetX: 2,
+                 offsetY: 2,
+                 color: '#FFD700',
+                 blur: 5,
+                 stroke: true,
+                 fill: true
+             }
+        }).setScrollFactor(0);
 
 
         // fuego
@@ -166,9 +235,9 @@ class Boss extends Phaser.Scene {
 
         this.cursors = this.input.keyboard.createCursorKeys();
         this.physics.add.collider(this.player.sprite, this.platforms);
-        // this.physics.add.collider(this.player.sprite, this.dragon);
+        this.physics.add.collider(this.player.sprite, this.dragon);
         this.physics.add.overlap(this.player.sprite, this.fuegos, this.hitPlayer, null, this);
-        // this.physics.add.overlap(this.player.sprite, this.dragon, this.hitPlayer, null, this);
+        this.physics.add.overlap(this.player.sprite, this.dragon, this.hitPlayer, null, this);
         this.physics.add.overlap(this.player.ataque, this.dragon, this.hitDragon, null, this);
         
     }
@@ -224,7 +293,7 @@ class Boss extends Phaser.Scene {
     lanzarfuego() {
         if (!this.dragon.ultimaPos && this.dragon.vida > 0) {
 
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < 5; i++) {
                 let fuego = this.fuegos.get(this.dragon.x, this.dragon.y);
                 if (fuego) {
                     fuego.setSize(30,30);
@@ -346,6 +415,7 @@ class Boss extends Phaser.Scene {
 
     hitDragon(attack, dragon) {
         dragon.vida--;
+        this.dragonVidasText.setText('Vidas Boss: ' + dragon.vida);
         attack.setVisible(false);
         attack.disableBody(true, true);
         dragon.play('pegar');
@@ -369,7 +439,7 @@ class Boss extends Phaser.Scene {
                 dragon.setVisible(false);
                 this.physics.pause();
                 this.scene.stop('Boss');
-                this.scene.launch('Victoria');
+                this.scene.launch('Victoria', { score: this.score });
             }, [], this);
         }
     }

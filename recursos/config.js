@@ -6,9 +6,10 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 300 },
-            debug: true
+            debug: false
         }
     },
     scene: [Juego, GameOver, Boss,Victoria],
     parent: 'contenedor-juego' 
 };
+// const game = new Phaser.Game(config);
