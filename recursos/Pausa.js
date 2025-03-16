@@ -6,7 +6,7 @@ class Pausa {
         this.isPaused = false;
         this.diferenciaX=50;
 
-        // Crear el objeto de video pero sin reproducirlo aún
+
         this.video = scene.add.video(scene.cameras.main.width / 2, scene.cameras.main.height / 2, 'pausaVideo')
             .setOrigin(0.5)
             .setVisible(false)
@@ -16,15 +16,15 @@ class Pausa {
         this.video.setPosition(this.video.x-this.diferenciaX,this.video.y); 
         this.video.setScale(0.65);    
 
-        // Crear botón de reanudar (imagen)
+    
         this.botonReanudar = scene.add.image(scene.cameras.main.width / 2, scene.cameras.main.height / 2 - 200, 'botonReanudar')
         .setOrigin(0.5)
         .setVisible(false)
         .setInteractive()
-        .setDepth(11) // Un poco más arriba que el video
-        .setScrollFactor(0);  // Asegurarse de que se mueva con el video
+        .setDepth(11) 
+        .setScrollFactor(0);  
 
-        // Evento al hacer clic en el botón
+
         this.botonReanudar.on('pointerdown', () => {
             this.reanudarJuego();
         });
@@ -32,7 +32,7 @@ class Pausa {
     
 
     actualizarPosicionBoton() {
-        // Asegúrate de que el botón esté siempre sobre el centro del video
+
         this.botonReanudar.setPosition(this.video.x, this.video.y + 100);
     }
 
@@ -52,7 +52,7 @@ class Pausa {
         this.scene.tweens.pauseAll();
         this.isPaused = true;
         this.video.setVisible(true);
-        this.video.play(true); // True para que se reinicie al mostrarse
+        this.video.play(true);
         this.botonReanudar.setVisible(true);
         this.player.sprite.anims.pause();
         this.player.sprite.anims.play('turn');
